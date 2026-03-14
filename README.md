@@ -1,1 +1,10 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/U8NqX9JL)
+# Primer trabajo en grupo - Rick & Morty
+
+- alu0101647111 - Lucía Hernández Marrero
+- alu0101660011 - Abel Martín Meneses
+- alu0101641379 - Mario Martín Ramón
+
+
+
+
+
