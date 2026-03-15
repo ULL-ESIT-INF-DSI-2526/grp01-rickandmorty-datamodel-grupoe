@@ -16,6 +16,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@types/node": "^25.5.0",
+    "@types/prompts": "^2.4.9",
     "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
@@ -28,6 +29,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "lowdb": "^7.0.1"
+    "lowdb": "^7.0.1",
+    "prompts": "^2.4.2"
   }
 }
