@@ -1,0 +1,398 @@
+import { db } from './db.js';
+
+/**
+ * Función para poblar la base de datos con datos de ejemplo.
+ * Es asyncrona porque las operaciones R/W lo son.
+ */
+export async function poblarDB() {
+    db.data.dimensiones.push(
+      {
+        id: 'C-137',
+        name: 'Dimensión Original',
+        state: 'activa',
+        nivelTecnolog: 8,
+        description: 'Dimensión de origen de Rick. Entropía anormalmente alta.'
+      },
+      {
+        id: 'C-500A',
+        name: 'Dimensión Cronenberg',
+        state: 'cuarentena',
+        nivelTecnolog: 4,
+        description: 'Población mutada genéticamente en abominaciones de carne.'
+      },
+      {
+        id: 'J19ζ7',
+        name: 'Dimensión Doofus',
+        state: 'activa',
+        nivelTecnolog: 6,
+        description: 'Hogar del Rick "Tonto". Sociedad pacífica y sin cinismo.'
+      },
+      {
+        id: 'K-83',
+        name: 'Dimensión de Mantequilla',
+        state: 'destruida',
+        nivelTecnolog: 2,
+        description: 'Universo de materia lípida. Colapsó por exceso de calor.'
+      },
+      {
+        id: 'D-99',
+        name: 'Dimensión Canina',
+        state: 'activa',
+        nivelTecnolog: 9,
+        description: 'Perros hiper-evolucionados al mando. Humanos domesticados.'
+      },
+      {
+        id: 'X-230',
+        name: 'Microverso Batería',
+        state: 'activa',
+        nivelTecnolog: 7,
+        description: 'Universo contenido en una caja para generar electricidad.'
+      },
+      {
+        id: 'B-22',
+        name: 'Dimensión Páramo',
+        state: 'activa',
+        nivelTecnolog: 5,
+        description: 'Desierto radiactivo dominado por clanes al estilo Mad Max.'
+      },
+      {
+        id: 'R-714',
+        name: 'Dimensión Mobiliario',
+        state: 'activa',
+        nivelTecnolog: 7,
+        description: 'Mobiliario antropomórfico y proporciones físicas invertidas.'
+      },
+      {
+        id: 'Q-11',
+        name: 'Planeta Serpiente',
+        state: 'cuarentena',
+        nivelTecnolog: 10,
+        description: 'Habitada por serpientes espaciales con viaje en el tiempo.'
+      },
+      {
+        id: 'T-800',
+        name: 'Dimensión Asimilada',
+        state: 'destruida',
+        nivelTecnolog: 10,
+        description: 'Toda vida orgánica fue asimilada por una IA.'
+      },
+      {
+        id: 'W-101',
+        name: 'Mundo Acuático',
+        state: 'activa',
+        nivelTecnolog: 5,
+        description: 'Planeta totalmente oceánico bajo control del Sr. Nimbus.'
+      },
+      {
+        id: 'E-001',
+        name: 'Dimensión Fascista',
+        state: 'activa',
+        nivelTecnolog: 8,
+        description: 'Realidad dominada por regímenes totalitarios en todas las especies.'
+      },
+      {
+        id: 'V-04',
+        name: 'Dimensión de Licuadoras',
+        state: 'activa',
+        nivelTecnolog: 9,
+        description: 'Entorno hostil lleno de cuchillas trituradoras gigantes.'
+      },
+      {
+        id: 'M-113',
+        name: 'Mundo Mega-Árbol',
+        state: 'activa',
+        nivelTecnolog: 1,
+        description: 'Mundo prehistórico famoso por sus semillas de superinteligencia.'
+      },
+      {
+        id: 'Z-Alpha',
+        name: 'Dimensión del Vacío',
+        state: 'cuarentena',
+        nivelTecnolog: 10,
+        description: 'Vertedero del Consejo para anomalías y clones fallidos.'
+      }
+    );
+    db.data.personajes.push(
+        {
+          id: 'char-01', name: 'Rick Sanchez', speciesId: 'sp-1', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 10,
+          description: 'El hombre más inteligente del universo. Cínico, alcohólico y brillante.'
+        },
+        {
+          id: 'char-02', name: 'Morty Smith', speciesId: 'sp-1', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Familia Smith', nivelIntelligence: 5,
+          description: 'Nieto de Rick. Nervioso pero con un sentido moral que a menudo choca con Rick.'
+        },
+        {
+          id: 'char-03', name: 'Summer Smith', speciesId: 'sp-1', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Familia Smith', nivelIntelligence: 6,
+          description: 'Hermana mayor de Morty. Adaptable, superficial pero sorprendentemente letal.'
+        },
+        {
+          id: 'char-04', name: 'Beth Smith', speciesId: 'sp-1', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Familia Smith', nivelIntelligence: 8,
+          description: 'Hija de Rick y cirujana de caballos. Comparte el complejo de superioridad de su padre.'
+        },
+        {
+          id: 'char-05', name: 'Jerry Smith', speciesId: 'sp-1', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Familia Smith', nivelIntelligence: 3,
+          description: 'Padre de Morty. Inseguro, patético, pero sobrevive a cosas increíbles por pura suerte.'
+        },
+      
+        {
+          id: 'char-06', name: 'Rick Doofus', speciesId: 'sp-1', dimensionId: 'J19ζ7',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 6,
+          description: 'El único Rick que no es cínico. Amable, se hace amigo de Jerry rápidamente.'
+        },
+        {
+          id: 'char-07', name: 'Rick Cronenberg', speciesId: 'sp-3', dimensionId: 'C-500A',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 9,
+          description: 'Versión mutada de Rick que se mudó a la dimensión C-137 temporalmente.'
+        },
+        {
+          id: 'char-08', name: 'Rick Fascista', speciesId: 'sp-1', dimensionId: 'E-001',
+          state: 'muerto', affiliation: 'Imperio Fascista', nivelIntelligence: 8,
+          description: 'Una versión totalitaria de Rick que murió clonándose.'
+        },
+        {
+          id: 'char-09', name: 'Pickle Rick (Rick Pepinillo)', speciesId: 'sp-1', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 10,
+          description: 'Rick transformado en pepinillo para evitar ir a terapia familiar.'
+        },
+        {
+          id: 'char-10', name: 'Rick Tóxico', speciesId: 'sp-tox', dimensionId: 'C-137',
+          state: 'muerto', affiliation: 'Independiente', nivelIntelligence: 10,
+          description: 'Manifestación física de todo lo que Rick considera tóxico en sí mismo.'
+        },
+      
+        {
+          id: 'char-11', name: 'Evil Morty', speciesId: 'sp-1', dimensionId: 'Z-Alpha',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 10,
+          description: 'Morty extremadamente inteligente y frío. Escapó de la Curva Finita Central.'
+        },
+        {
+          id: 'char-12', name: 'Morty Cronenberg', speciesId: 'sp-3', dimensionId: 'C-500A',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 4,
+          description: 'Versión mutada de Morty, convertido en un amasijo de carne.'
+        },
+        {
+          id: 'char-13', name: 'Cop Morty', speciesId: 'sp-1', dimensionId: 'Z-Alpha',
+          state: 'muerto', affiliation: 'Consejo de Ricks', nivelIntelligence: 5,
+          description: 'Policía corrupto en la Ciudadela, desprecia a otros Mortys.'
+        },
+        {
+          id: 'char-14', name: 'Morty Fascista', speciesId: 'sp-1', dimensionId: 'E-001',
+          state: 'muerto', affiliation: 'Imperio Fascista', nivelIntelligence: 5,
+          description: 'Acompañante del Rick Fascista, traicionado por su propio abuelo.'
+        },
+      
+        {
+          id: 'char-15', name: 'Space Beth', speciesId: 'sp-1', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Rebelión', nivelIntelligence: 8,
+          description: 'Clon (o la original) de Beth que decidió abandonar la Tierra para combatir a la Federación.'
+        },
+        {
+          id: 'char-16', name: 'Jerry Prime', speciesId: 'sp-1', dimensionId: 'C-500A',
+          state: 'muerto', affiliation: 'Sobrevivientes', nivelIntelligence: 5,
+          description: 'Jerry post-apocalíptico de la dimensión Cronenberg. Se volvió rudo y musculoso.'
+        },
+        {
+          id: 'char-17', name: 'Jerry del Páramo', speciesId: 'sp-1', dimensionId: 'B-22',
+          state: 'vivo', affiliation: 'Clanes del Páramo', nivelIntelligence: 4,
+          description: 'Líder saqueador en una dimensión al estilo Mad Max.'
+        },
+      
+        {
+          id: 'char-18', name: 'Hombre Pájaro', speciesId: 'sp-4', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 7,
+          description: 'Mejor amigo de Rick. Sabio y estoico, traicionado en su propia boda.'
+        },
+        {
+          id: 'char-19', name: 'Persona Fénix', speciesId: 'sp-cyb', dimensionId: 'C-137',
+          state: 'robot', affiliation: 'Federación Galáctica', nivelIntelligence: 7,
+          description: 'Hombre Pájaro reconstruido como cyborg por la Federación Galáctica.'
+        },
+        {
+          id: 'char-20', name: 'Snuffles (Snowball)', speciesId: 'sp-2', dimensionId: 'D-99',
+          state: 'vivo', affiliation: 'Imperio Canino', nivelIntelligence: 8,
+          description: 'Antiguo perro de los Smith que obtuvo superinteligencia y conquistó su propio planeta.'
+        },
+        {
+          id: 'char-21', name: 'Sr. Meeseeks', speciesId: 'sp-8', dimensionId: 'C-137',
+          state: 'muerto', affiliation: 'Independiente', nivelIntelligence: 5,
+          description: 'Criatura creada para cumplir un solo propósito. La existencia es dolor para él.'
+        },
+        {
+          id: 'char-22', name: 'Zeep Xanflorp', speciesId: 'sp-mic', dimensionId: 'X-230',
+          state: 'vivo', affiliation: 'Imperio Microverso', nivelIntelligence: 10,
+          description: 'Científico arrogante dentro del microverso de Rick, tan inteligente como él.'
+        },
+        {
+          id: 'char-23', name: 'Krombopulos Michael', speciesId: 'sp-9', dimensionId: 'C-137',
+          state: 'muerto', affiliation: 'Independiente', nivelIntelligence: 6,
+          description: 'Asesino a sueldo muy alegre. "Oh boy, here I go killing again".'
+        },
+        {
+          id: 'char-24', name: 'Sr. Nimbus', speciesId: 'sp-10', dimensionId: 'W-101',
+          state: 'vivo', affiliation: 'Rey del Océano', nivelIntelligence: 8,
+          description: 'Némesis absoluto de Rick. Controla a la policía y tiene poderes sobre el agua.'
+        },
+        {
+          id: 'char-25', name: 'Revolio Relojberg Jr. (Gearhead)', speciesId: 'sp-7', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 6,
+          description: 'Alien hecho de engranajes. Conocido de Rick que lo traicionó por la recompensa.'
+        },
+        {
+          id: 'char-26', name: 'Presidente Serpiente', speciesId: 'sp-5', dimensionId: 'Q-11',
+          state: 'vivo', affiliation: 'Gobierno Serpiente', nivelIntelligence: 7,
+          description: 'Líder del planeta de serpientes. Intenta ganar la guerra con viajes temporales.'
+        },
+      
+        {
+          id: 'char-27', name: 'Rick Holograma', speciesId: 'sp-ia', dimensionId: 'C-137',
+          state: 'robot', affiliation: 'Familia Smith', nivelIntelligence: 10,
+          description: 'Proyección IA programada por Rick para guiar a Morty si él moría.'
+        },
+        {
+          id: 'char-28', name: 'Morty Robot', speciesId: 'sp-cyb', dimensionId: 'C-137',
+          state: 'robot', affiliation: 'Familia Smith', nivelIntelligence: 5,
+          description: 'Un señuelo robótico de Morty usado para engañar a asesinos intergalácticos.'
+        },
+        {
+          id: 'char-29', name: 'Slippery Stair', speciesId: 'sp-bab', dimensionId: 'M-113',
+          state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 4,
+          description: 'Babosa gigante que cobra por bajar a la gente de las escaleras del bar.'
+        },
+        {
+          id: 'char-30', name: 'Presidente Curtis', speciesId: 'sp-1', dimensionId: 'C-137',
+          state: 'vivo', affiliation: 'Gobierno de EE.UU.', nivelIntelligence: 7,
+          description: 'Presidente de EE.UU. Tiene una relación de amor-odio y rivalidad constante con Rick.'
+        }
+    );
+    db.data.especies.push(
+      {
+        id: 'sp-1',
+        name: 'Humano',
+        origin: 'Tierra',
+        type: 'Humanoide',
+        expectancy: 80,
+        description: 'Bípedos adaptables de intelecto promedio.'
+      },
+      {
+        id: 'sp-2',
+        name: 'Cronenberg',
+        origin: 'Tierra (C-500A)',
+        type: 'Amorfo',
+        expectancy: 150,
+        description: 'Abominaciones de carne mutada por un virus genético.'
+      },
+      {
+        id: 'sp-3',
+        name: 'Gazorpiano',
+        origin: 'Gazorpazorp',
+        type: 'Humanoide / Bestial',
+        expectancy: 60,
+        description: 'Sociedad dividida en machos salvajes y hembras utópicas.'
+      },
+      {
+        id: 'sp-4',
+        name: 'Meeseeks',
+        origin: 'Caja de Meeseeks',
+        type: 'Entidad Artificial',
+        expectancy: 0.1,
+        description: 'Seres creados para cumplir una única orden y desaparecer.'
+      },
+      {
+        id: 'sp-5',
+        name: 'Zigerion',
+        origin: 'Zigerion Prime',
+        type: 'Humanoide',
+        expectancy: 120,
+        description: 'Estafadores cósmicos con fobia extrema a la desnudez.'
+      },
+      {
+        id: 'sp-6',
+        name: 'Gromflomite',
+        origin: 'Gromflom Prime',
+        type: 'Insectoide',
+        expectancy: 90,
+        description: 'Burócratas y militares de la Federación Galáctica.'
+      },
+      {
+        id: 'sp-7',
+        name: 'Parásito de la Memoria',
+        origin: 'Desconocido',
+        type: 'Parásito',
+        expectancy: 15,
+        description: 'Se infiltran implantando recuerdos falsos en sus víctimas.'
+      },
+      {
+        id: 'sp-8',
+        name: 'Cánido Mejorado',
+        origin: 'Tierra (D-99)',
+        type: 'Cibernético',
+        expectancy: 45,
+        description: 'Perros superinteligentes equipados con exoesqueletos.'
+      },
+      {
+        id: 'sp-9',
+        name: 'Mente Colmena',
+        origin: 'Asimilación cósmica',
+        type: 'Hivemind',
+        expectancy: 10000,
+        description: 'Entidad que controla las mentes de planetas enteros.'
+      },
+      {
+        id: 'sp-10',
+        name: 'Persona Engranaje',
+        origin: 'Mundo Engranaje',
+        type: 'Robótico',
+        expectancy: 200,
+        description: 'Seres biomecánicos formados exclusivamente por engranajes.'
+      }
+    );    
+    db.data.ubicaciones.push(
+        { id: 1, name: 'Casa de los Smith', dimensionId: 'C-137', population: 5, description: 'Residencia suburbana con laboratorio secreto en el garaje.' },
+        { id: 2, name: 'Secundaria Harry Herpson', dimensionId: 'C-137', population: 1500, description: 'Instituto público donde estudian Morty y Summer.' },
+        { id: 3, name: 'Anatomía Park', dimensionId: 'C-137', population: 300, description: 'Parque temático microscópico dentro de un vagabundo.' },
+        { id: 4, name: 'Blips and Chitz', dimensionId: 'C-137', population: 45000, description: 'Salón recreativo intergaláctico.' },
+        { id: 5, name: 'Hospital St. Equis', dimensionId: 'C-137', population: 120, description: 'Clínica veterinaria equina donde trabaja Beth.' },
+      
+        { id: 6, name: 'Ciudadela de los Ricks', dimensionId: 'Z-Alpha', population: 2000000, description: 'Estación espacial y capital secreta interdimensional.' },
+        { id: 7, name: 'Prisión de la Federación', dimensionId: 'Z-Alpha', population: 500000, description: 'Instalación hiper-fortificada de máxima seguridad.' },
+        { id: 8, name: 'Jerryboree', dimensionId: 'Z-Alpha', population: 850, description: 'Guardería transdimensional exclusiva para Jerrys.' },
+        { id: 9, name: 'Aduana Intergaláctica', dimensionId: 'Z-Alpha', population: 15000, description: 'Punto de control fronterizo de la Federación.' },
+      
+        { id: 10, name: 'Ruinas de Seattle', dimensionId: 'C-500A', population: 35000, description: 'Ciudad destruida y dominada por monstruos mutantes.' },
+        { id: 11, name: 'Campamento Sobrevivientes', dimensionId: 'C-500A', population: 142, description: 'Asentamiento fortificado liderado por Jerry Prime.' },
+      
+        { id: 12, name: 'Planeta Purga', dimensionId: 'J19ζ7', population: 4000000, description: 'Mundo pacífico con una noche anual de violencia legal.' },
+        { id: 13, name: 'Gazorpazorp', dimensionId: 'J19ζ7', population: 7000000, description: 'Planeta dividido en machos salvajes y hembras utópicas.' },
+        { id: 14, name: 'Planeta Squanch', dimensionId: 'J19ζ7', population: 2500000, description: 'Mundo natal de Squanchy donde todo es "squanch".' },
+        { id: 15, name: 'Mundo Mega-Árbol', dimensionId: 'M-113', population: 0, description: 'Planeta prehistórico con semillas de superinteligencia.' },
+        { id: 16, name: 'Planeta Microverso', dimensionId: 'X-230', population: 12000000, description: 'Mundo en miniatura usado como batería para la nave de Rick.' },
+        { id: 17, name: 'Capital de las Serpientes', dimensionId: 'Q-11', population: 9500000, description: 'Metrópolis adaptada exclusivamente para serpientes.' },
+        { id: 18, name: 'Palacio del Océano', dimensionId: 'W-101', population: 5000, description: 'Sede submarina del poder del Sr. Nimbus.' },
+        { id: 19, name: 'Mundo Engranaje', dimensionId: 'R-714', population: 8000000, description: 'Planeta mecánico hecho completamente de engranajes.' },
+        { id: 20, name: 'Plutón', dimensionId: 'D-99', population: 30000000, description: 'Mundo minero obsesionado con recuperar su estatus de planeta.' }
+    );
+    db.data.invenciones.push(
+        { id: 1, name: 'Pistola de Portales', inventorId: 1, tipo: 'Transporte', nivelDanger: 9, description: 'Permite viajar instantáneamente entre cualquier dimensión.' },
+        { id: 2, name: 'Nave Espacial', inventorId: 1, tipo: 'Vehículo', nivelDanger: 8, description: 'Nave construida con basura que viaja más rápido que la luz.' },
+        { id: 3, name: 'Batería de Microverso', inventorId: 1, tipo: 'Energía', nivelDanger: 10, description: 'Contiene un universo entero esclavizado para generar electricidad.' },
+        { id: 4, name: 'Casco de Inteligencia Canina', inventorId: 1, tipo: 'Mejora Cognitiva', nivelDanger: 7, description: 'Otorga superinteligencia y capacidad de habla a los perros.' },
+        { id: 5, name: 'Caja de Meeseeks', inventorId: 1, tipo: 'Utilidad', nivelDanger: 6, description: 'Invoca a un ser diseñado para cumplir una única tarea.' },
+        { id: 6, name: 'Gafas de Realidad Alternativa', inventorId: 1, tipo: 'Entretenimiento', nivelDanger: 3, description: 'Muestra la vida del usuario en dimensiones paralelas.' },
+        { id: 7, name: 'Traje de Purga', inventorId: 1, tipo: 'Armamento', nivelDanger: 10, description: 'Armadura de combate indestructible con un arsenal letal.' },
+        { id: 8, name: 'Tanques de Clonación', inventorId: 1, tipo: 'Biotecnología', nivelDanger: 8, description: 'Clona el cuerpo y transfiere la consciencia al morir.' },
+        { id: 9, name: 'Borramemorias', inventorId: 1, tipo: 'Modificación Mental', nivelDanger: 9, description: 'Extrae y almacena recuerdos traumáticos o molestos del cerebro.' },
+        { id: 10, name: 'Miniverso', inventorId: 22, tipo: 'Energía', nivelDanger: 10, description: 'Batería anidada dentro del microverso original de Rick.' },
+        { id: 11, name: 'Botas de Gravedad', inventorId: 1, tipo: 'Movilidad', nivelDanger: 4, description: 'Permiten caminar por paredes y techos desafiando la gravedad.' },
+        { id: 12, name: 'Suero Mantis', inventorId: 1, tipo: 'Arma Biológica', nivelDanger: 10, description: 'Muta a la gente en monstruos obsesionados con procrear.' },
+        { id: 13, name: 'Collar Traductor', inventorId: 1, tipo: 'Comunicación', nivelDanger: 2, description: 'Traduce instantáneamente cualquier idioma alienígena.' },
+        { id: 14, name: 'Cúpula de Camuflaje Mental', inventorId: 11, tipo: 'Camuflaje', nivelDanger: 7, description: 'Oculta la genialidad usando las ondas cerebrales de Mortys torturados.' },
+        { id: 15, name: 'Suero de Regeneración', inventorId: 1, tipo: 'Médico', nivelDanger: 5, description: 'Cura heridas mortales casi instantáneamente.' }
+    );
+    await db.write();
+}
+// poblarDB();

@@ -2,7 +2,7 @@
  * Interfaz que representa una especie en el universo de Rick and Morty.
  */
 export interface Species {
-  id: number;
+  id: string;
   name: string;
   origin: string;
   type: string;
