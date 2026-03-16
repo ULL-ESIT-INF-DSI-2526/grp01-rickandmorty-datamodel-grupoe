@@ -2,9 +2,10 @@
  * Interfaz que representa una ubicación en el universo de Rick and Morty.
  */
 export interface Location {
-  id: number;
+  id: string;
   name: string;
-  dimensionId: string; // Referencia al ID de la dimensión a la que pertenece la ubicación, NO SE SI ES ASI LO DE REFERENCIA
+  type: string;
+  dimensionId: string;
   population: number;
   description: string;
 }

@@ -352,46 +352,46 @@ export async function poblarDB() {
       }
     );    
     db.data.ubicaciones.push(
-        { id: 1, name: 'Casa de los Smith', dimensionId: 'C-137', population: 5, description: 'Residencia suburbana con laboratorio secreto en el garaje.' },
-        { id: 2, name: 'Secundaria Harry Herpson', dimensionId: 'C-137', population: 1500, description: 'Instituto público donde estudian Morty y Summer.' },
-        { id: 3, name: 'Anatomía Park', dimensionId: 'C-137', population: 300, description: 'Parque temático microscópico dentro de un vagabundo.' },
-        { id: 4, name: 'Blips and Chitz', dimensionId: 'C-137', population: 45000, description: 'Salón recreativo intergaláctico.' },
-        { id: 5, name: 'Hospital St. Equis', dimensionId: 'C-137', population: 120, description: 'Clínica veterinaria equina donde trabaja Beth.' },
+        { id: '1', name: 'Casa de los Smith', type: 'Planeta', dimensionId: 'C-137', population: 5, description: 'Residencia suburbana con laboratorio secreto en el garaje.' },
+        { id: '2', name: 'Secundaria Harry Herpson', type: 'Planeta', dimensionId: 'C-137', population: 1500, description: 'Instituto público donde estudian Morty y Summer.' },
+        { id: '3', name: 'Anatomía Park', type: 'Dimensión de bolsillo', dimensionId: 'C-137', population: 300, description: 'Parque temático microscópico dentro de un vagabundo.' },
+        { id: '4', name: 'Blips and Chitz', type: 'Estación espacial', dimensionId: 'C-137', population: 45000, description: 'Salón recreativo intergaláctico.' },
+        { id: '5', name: 'Hospital St. Equis', type: 'Planeta', dimensionId: 'C-137', population: 120, description: 'Clínica veterinaria equina donde trabaja Beth.' },
       
-        { id: 6, name: 'Ciudadela de los Ricks', dimensionId: 'Z-Alpha', population: 2000000, description: 'Estación espacial y capital secreta interdimensional.' },
-        { id: 7, name: 'Prisión de la Federación', dimensionId: 'Z-Alpha', population: 500000, description: 'Instalación hiper-fortificada de máxima seguridad.' },
-        { id: 8, name: 'Jerryboree', dimensionId: 'Z-Alpha', population: 850, description: 'Guardería transdimensional exclusiva para Jerrys.' },
-        { id: 9, name: 'Aduana Intergaláctica', dimensionId: 'Z-Alpha', population: 15000, description: 'Punto de control fronterizo de la Federación.' },
+        { id: '6', name: 'Ciudadela de los Ricks', type: 'Estación espacial', dimensionId: 'Z-Alpha', population: 2000000, description: 'Estación espacial y capital secreta interdimensional.' },
+        { id: '7', name: 'Prisión de la Federación', type: 'Estación espacial', dimensionId: 'Z-Alpha', population: 500000, description: 'Instalación hiper-fortificada de máxima seguridad.' },
+        { id: '8', name: 'Jerryboree', type: 'Dimensión de bolsillo', dimensionId: 'Z-Alpha', population: 850, description: 'Guardería transdimensional exclusiva para Jerrys.' },
+        { id: '9', name: 'Aduana Intergaláctica', type: 'Estación espacial', dimensionId: 'Z-Alpha', population: 15000, description: 'Punto de control fronterizo de la Federación.' },
       
-        { id: 10, name: 'Ruinas de Seattle', dimensionId: 'C-500A', population: 35000, description: 'Ciudad destruida y dominada por monstruos mutantes.' },
-        { id: 11, name: 'Campamento Sobrevivientes', dimensionId: 'C-500A', population: 142, description: 'Asentamiento fortificado liderado por Jerry Prime.' },
+        { id: '10', name: 'Ruinas de Seattle', type: 'Planeta', dimensionId: 'C-500A', population: 35000, description: 'Ciudad destruida y dominada por monstruos mutantes.' },
+        { id: '11', name: 'Campamento Sobrevivientes', type: 'Planeta', dimensionId: 'C-500A', population: 142, description: 'Asentamiento fortificado liderado por Jerry Prime.' },
       
-        { id: 12, name: 'Planeta Purga', dimensionId: 'J19ζ7', population: 4000000, description: 'Mundo pacífico con una noche anual de violencia legal.' },
-        { id: 13, name: 'Gazorpazorp', dimensionId: 'J19ζ7', population: 7000000, description: 'Planeta dividido en machos salvajes y hembras utópicas.' },
-        { id: 14, name: 'Planeta Squanch', dimensionId: 'J19ζ7', population: 2500000, description: 'Mundo natal de Squanchy donde todo es "squanch".' },
-        { id: 15, name: 'Mundo Mega-Árbol', dimensionId: 'M-113', population: 0, description: 'Planeta prehistórico con semillas de superinteligencia.' },
-        { id: 16, name: 'Planeta Microverso', dimensionId: 'X-230', population: 12000000, description: 'Mundo en miniatura usado como batería para la nave de Rick.' },
-        { id: 17, name: 'Capital de las Serpientes', dimensionId: 'Q-11', population: 9500000, description: 'Metrópolis adaptada exclusivamente para serpientes.' },
-        { id: 18, name: 'Palacio del Océano', dimensionId: 'W-101', population: 5000, description: 'Sede submarina del poder del Sr. Nimbus.' },
-        { id: 19, name: 'Mundo Engranaje', dimensionId: 'R-714', population: 8000000, description: 'Planeta mecánico hecho completamente de engranajes.' },
-        { id: 20, name: 'Plutón', dimensionId: 'D-99', population: 30000000, description: 'Mundo minero obsesionado con recuperar su estatus de planeta.' }
+        { id: '12', name: 'Planeta Purga', type: 'Planeta', dimensionId: 'J19ζ7', population: 4000000, description: 'Mundo pacífico con una noche anual de violencia legal.' },
+        { id: '13', name: 'Gazorpazorp', type: 'Planeta', dimensionId: 'J19ζ7', population: 7000000, description: 'Planeta dividido en machos salvajes y hembras utópicas.' },
+        { id: '14', name: 'Planeta Squanch', type: 'Planeta', dimensionId: 'J19ζ7', population: 2500000, description: 'Mundo natal de Squanchy donde todo es "squanch".' },
+        { id: '15', name: 'Mundo Mega-Árbol', type: 'Planeta', dimensionId: 'M-113', population: 0, description: 'Planeta prehistórico con semillas de superinteligencia.' },
+        { id: '16', name: 'Planeta Microverso', type: 'Dimensión de bolsillo', dimensionId: 'X-230', population: 12000000, description: 'Mundo en miniatura usado como batería para la nave de Rick.' },
+        { id: '17', name: 'Capital de las Serpientes', type: 'Planeta', dimensionId: 'Q-11', population: 9500000, description: 'Metrópolis adaptada exclusivamente para serpientes.' },
+        { id: '18', name: 'Palacio del Océano', type: 'Planeta', dimensionId: 'W-101', population: 5000, description: 'Sede submarina del poder del Sr. Nimbus.' },
+        { id: '19', name: 'Mundo Engranaje', type: 'Planeta', dimensionId: 'R-714', population: 8000000, description: 'Planeta mecánico hecho completamente de engranajes.' },
+        { id: '20', name: 'Plutón', type: 'Planeta', dimensionId: 'D-99', population: 30000000, description: 'Mundo minero obsesionado con recuperar su estatus de planeta.' }
     );
     db.data.invenciones.push(
-        { id: 1, name: 'Pistola de Portales', inventorId: 1, tipo: 'Transporte', nivelDanger: 9, description: 'Permite viajar instantáneamente entre cualquier dimensión.' },
-        { id: 2, name: 'Nave Espacial', inventorId: 1, tipo: 'Vehículo', nivelDanger: 8, description: 'Nave construida con basura que viaja más rápido que la luz.' },
-        { id: 3, name: 'Batería de Microverso', inventorId: 1, tipo: 'Energía', nivelDanger: 10, description: 'Contiene un universo entero esclavizado para generar electricidad.' },
-        { id: 4, name: 'Casco de Inteligencia Canina', inventorId: 1, tipo: 'Mejora Cognitiva', nivelDanger: 7, description: 'Otorga superinteligencia y capacidad de habla a los perros.' },
-        { id: 5, name: 'Caja de Meeseeks', inventorId: 1, tipo: 'Utilidad', nivelDanger: 6, description: 'Invoca a un ser diseñado para cumplir una única tarea.' },
-        { id: 6, name: 'Gafas de Realidad Alternativa', inventorId: 1, tipo: 'Entretenimiento', nivelDanger: 3, description: 'Muestra la vida del usuario en dimensiones paralelas.' },
-        { id: 7, name: 'Traje de Purga', inventorId: 1, tipo: 'Armamento', nivelDanger: 10, description: 'Armadura de combate indestructible con un arsenal letal.' },
-        { id: 8, name: 'Tanques de Clonación', inventorId: 1, tipo: 'Biotecnología', nivelDanger: 8, description: 'Clona el cuerpo y transfiere la consciencia al morir.' },
-        { id: 9, name: 'Borramemorias', inventorId: 1, tipo: 'Modificación Mental', nivelDanger: 9, description: 'Extrae y almacena recuerdos traumáticos o molestos del cerebro.' },
-        { id: 10, name: 'Miniverso', inventorId: 22, tipo: 'Energía', nivelDanger: 10, description: 'Batería anidada dentro del microverso original de Rick.' },
-        { id: 11, name: 'Botas de Gravedad', inventorId: 1, tipo: 'Movilidad', nivelDanger: 4, description: 'Permiten caminar por paredes y techos desafiando la gravedad.' },
-        { id: 12, name: 'Suero Mantis', inventorId: 1, tipo: 'Arma Biológica', nivelDanger: 10, description: 'Muta a la gente en monstruos obsesionados con procrear.' },
-        { id: 13, name: 'Collar Traductor', inventorId: 1, tipo: 'Comunicación', nivelDanger: 2, description: 'Traduce instantáneamente cualquier idioma alienígena.' },
-        { id: 14, name: 'Cúpula de Camuflaje Mental', inventorId: 11, tipo: 'Camuflaje', nivelDanger: 7, description: 'Oculta la genialidad usando las ondas cerebrales de Mortys torturados.' },
-        { id: 15, name: 'Suero de Regeneración', inventorId: 1, tipo: 'Médico', nivelDanger: 5, description: 'Cura heridas mortales casi instantáneamente.' }
+        { id: '1', name: 'Pistola de Portales', inventorId: 'char-01', tipo: 'Transporte', nivelDanger: 9, description: 'Permite viajar instantáneamente entre cualquier dimensión.' },
+        { id: '2', name: 'Nave Espacial', inventorId: 'char-01', tipo: 'Vehículo', nivelDanger: 8, description: 'Nave construida con basura que viaja más rápido que la luz.' },
+        { id: '3', name: 'Batería de Microverso', inventorId: 'char-01', tipo: 'Energía', nivelDanger: 10, description: 'Contiene un universo entero esclavizado para generar electricidad.' },
+        { id: '4', name: 'Casco de Inteligencia Canina', inventorId: 'char-01', tipo: 'Mejora Cognitiva', nivelDanger: 7, description: 'Otorga superinteligencia y capacidad de habla a los perros.' },
+        { id: '5', name: 'Caja de Meeseeks', inventorId: 'char-01', tipo: 'Utilidad', nivelDanger: 6, description: 'Invoca a un ser diseñado para cumplir una única tarea.' },
+        { id: '6', name: 'Gafas de Realidad Alternativa', inventorId: 'char-01', tipo: 'Entretenimiento', nivelDanger: 3, description: 'Muestra la vida del usuario en dimensiones paralelas.' },
+        { id: '7', name: 'Traje de Purga', inventorId: 'char-01', tipo: 'Armamento', nivelDanger: 10, description: 'Armadura de combate indestructible con un arsenal letal.' },
+        { id: '8', name: 'Tanques de Clonación', inventorId: 'char-01', tipo: 'Biotecnología', nivelDanger: 8, description: 'Clona el cuerpo y transfiere la consciencia al morir.' },
+        { id: '9', name: 'Borramemorias', inventorId: 'char-01', tipo: 'Modificación Mental', nivelDanger: 9, description: 'Extrae y almacena recuerdos traumáticos o molestos del cerebro.' },
+        { id: '10', name: 'Miniverso', inventorId: 'char-22', tipo: 'Energía', nivelDanger: 10, description: 'Batería anidada dentro del microverso original de Rick.' },
+        { id: '11', name: 'Botas de Gravedad', inventorId: 'char-01', tipo: 'Movilidad', nivelDanger: 4, description: 'Permiten caminar por paredes y techos desafiando la gravedad.' },
+        { id: '12', name: 'Suero Mantis', inventorId: 'char-01', tipo: 'Arma Biológica', nivelDanger: 10, description: 'Muta a la gente en monstruos obsesionados con procrear.' },
+        { id: '13', name: 'Collar Traductor', inventorId: 'char-01', tipo: 'Comunicación', nivelDanger: 2, description: 'Traduce instantáneamente cualquier idioma alienígena.' },
+        { id: '14', name: 'Cúpula de Camuflaje Mental', inventorId: 'char-11', tipo: 'Camuflaje', nivelDanger: 7, description: 'Oculta la genialidad usando las ondas cerebrales de Mortys torturados.' },
+        { id: '15', name: 'Suero de Regeneración', inventorId: 'char-01', tipo: 'Médico', nivelDanger: 5, description: 'Cura heridas mortales casi instantáneamente.' }
     );
     await db.write();
 }
