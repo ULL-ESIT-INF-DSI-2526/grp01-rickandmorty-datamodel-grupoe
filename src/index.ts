@@ -1,6 +1,14 @@
 import prompts from 'prompts';
 import { menuPersonajes } from './menus/personajes.js';
-// Importar el resto de menús...
+import { menuDimensiones } from './menus/dimensiones.js';
+// import { menuEspecies } from './menus/especies.js';
+// import { menuLocalizaciones } from './menus/localizaciones.js';
+// import { menuInventos } from './menus/inventos.js';
+
+import { db } from './database/db.js'; 
+import { GestorMultiverso } from './gestor/gestor.js';
+
+
 
 // Función auxiliar tipada que devuelve una Promesa vacía
 async function pausar(): Promise<void> {
@@ -12,6 +20,8 @@ async function pausar(): Promise<void> {
 }
 
 async function menuPrincipal(): Promise<void> {
+  const gestor = new GestorMultiverso(db); // Creamos una instancia del gestor pasando la base de datos
+
   let salir: boolean = false;
 
   while (!salir) {
@@ -39,11 +49,12 @@ async function menuPrincipal(): Promise<void> {
 
     switch (respuesta.opcion) {
       case 'personajes':
-        await menuPersonajes();
+        await menuPersonajes(gestor); // Pasamos el gestor al menú de personajes para que pueda interactuar con la base de datos
+        await pausar();
         break;
       case 'dimensiones':
-        console.log('\n[TODO: Cargar menú de dimensiones]');
-        await pausar();
+        await menuDimensiones(gestor); // Aquí cargarías el menú de dimensiones, pasando el gestor
+        await pausar(); // Pausamos después de volver del menú para que el usuario pueda leer cualquier mensaje antes de limpiar la consola
         break;
       // ... (resto de casos)
       case 'salir':
