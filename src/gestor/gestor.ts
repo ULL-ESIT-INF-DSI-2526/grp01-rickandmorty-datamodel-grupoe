@@ -1,5 +1,11 @@
-import { Character } from '../interfaces/character.js';
-import { Dimension } from '../interfaces/dimension.js';
+import { GestorDimensiones } from './gestordimensiones.js';
+import { GestorPersonajes } from './gestorpersonajes.js';
+import { GestorEspecies } from './gestorespecies.js';
+import { GestorLocalizaciones } from './gestorlocalizaciones.js'
+import { GestorInventos } from './gestorinventos.js'
+import { Low } from 'lowdb';
+
+import { Data } from '../database/db.js';
 
 /**
  * Clase con el gestor central del Multiverso.
@@ -7,53 +13,22 @@ import { Dimension } from '../interfaces/dimension.js';
  * y gestionar las entidades (Dimensiones, Personajes, etc.).
  */
 export class GestorMultiverso {
-  // Para las primeras pruebas usaremos vectroes en memoria, esto lo cambiaremos por bases de datos (los lowdb) en el futuro
-  private dimensiones: Dimension[] = [];
-  private personajes: Character[] = [];
+  public dimensiones: GestorDimensiones;
+  public personajes: GestorPersonajes;
+  public especies: GestorEspecies;
+  public localizaciones: GestorLocalizaciones;
+  public inventos: GestorInventos;
 
-  /**
-   * Función para agregar una nueva dimensión al multiverso, con las comprobaciones necesarias para mantener la coherencia del sistema.
-   * @param dimension - La dimensión a agregar
-   */
-  public agregarDimension(dimension: Dimension): void {
-    if (dimension.nivelTecnolog < 1 || dimension.nivelTecnolog > 10) {
-      throw new Error(`El nivel tecnológico debe estar entre 1 y 10. Valor recibido: ${dimension.nivelTecnolog}`);
-    }
-    const existe = this.dimensiones.find(d => d.id === dimension.id);
-    if (existe) {
-      throw new Error(`Ya existe una dimensión con el ID ${dimension.id}`);
-    }
-    this.dimensiones.push(dimension);
+  private db: Low<Data>; // Referencia a la base de datos
+
+  // Constructor que recibe la base de datos desde fuera (desde nuestro db.js)
+  constructor(baseDatos: Low<Data>) {
+    this.db = baseDatos;
+    this.dimensiones = new GestorDimensiones(baseDatos);
+    this.personajes = new GestorPersonajes(baseDatos);
+    this.especies = new GestorEspecies(baseDatos);
+    this.localizaciones = new GestorLocalizaciones(baseDatos);
+    this.inventos = new GestorInventos(baseDatos);
   }
 
-  /**
-   * Funcion para obtener las dimensiones del multiverso
-   */
-  public obtenerDimensiones(): Dimension[] {
-    return this.dimensiones;
-  }
-
-  /**
-   * Función para agregar un nuevo personaje al multiverso, con las comprobaciones necesarias para mantener la coherencia del sistema.
-   * @param personaje - Personaje a añadir
-   */
-  public agregarPersonaje(personaje: Character): void {
-    // Validación de existencia de la dimensión de origen del personaje
-    const dimensionOrigen = this.dimensiones.find(d => d.id === personaje.dimensionId);
-    if (!dimensionOrigen) {
-      throw new Error(`La dimensión de origen ${personaje.dimensionId} no existe en el multiverso.`);
-    }
-    // Validación de inteligencia (escala del 1 al 10)
-    if (personaje.nivelIntelligence < 1 || personaje.nivelIntelligence > 10) {
-      throw new Error('El nivel de inteligencia debe estar entre 1 y 10.');
-    }
-    this.personajes.push(personaje);
-  }
-
-  /**
-   * Función para obtener la lista de personajes registrados en el multiverso.
-   */
-  public obtenerPersonajes(): Character[] {
-    return this.personajes;
-  }
 }
