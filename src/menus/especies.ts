@@ -29,14 +29,10 @@ export async function menuEspecies(gestor: GestorMultiverso): Promise<void> {
 
     switch (respuesta.accion) {
       case 'add':
-        console.log('\n[TODO: Añadir especie]');
-        await pausar();
         await flujoAñadirEspecie(gestor);
         await pausar();
         break;
       case 'delete':
-        console.log('\n[TODO: Eliminar especie]');
-        await pausar();
         await flujoEliminarEspecie(gestor);
         await pausar();
         break;

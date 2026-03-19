@@ -32,20 +32,14 @@ export async function menuPersonajes(gestor: GestorMultiverso): Promise<void> {
 
     switch (respuesta.accion) {
       case 'add':
-        console.log('\n[TODO: Añadir personaje]');
-        await pausar();
         await flujoAñadirPersonaje(gestor);
         await pausar();
         break;
       case 'delete':
-        console.log('\n[TODO: Eliminar personaje]');
-        await pausar();
         await flujoEliminarPersonaje(gestor);
         await pausar();
         break;
       case 'update':
-        console.log('\n[TODO: Modificar personaje]');
-        await pausar();
         await flujoModificarPersonaje(gestor);
         await pausar();
         break;

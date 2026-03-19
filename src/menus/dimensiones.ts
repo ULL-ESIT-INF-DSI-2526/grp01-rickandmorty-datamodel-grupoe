@@ -28,14 +28,10 @@ export async function menuDimensiones(gestor: GestorMultiverso): Promise<void> {
 
     switch (respuesta.accion) {
       case 'add':
-        console.log('\n[TODO: Añadir dimensión]');
-        await pausar();
         await flujoAñadirDimension(gestor);
         await pausar();
         break;
       case 'delete':
-        console.log('\n[TODO: Eliminar dimensión]');
-        await pausar();
         await flujoEliminarDimension(gestor);
         await pausar();
         break;

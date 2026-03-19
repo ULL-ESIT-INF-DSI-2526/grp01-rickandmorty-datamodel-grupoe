@@ -30,14 +30,10 @@ export async function menuInventos(gestor: GestorMultiverso): Promise<void> {
 
     switch (respuesta.accion) {
       case 'add':
-        console.log('\n[TODO: Añadir invento]');
-        await pausar();
         await flujoAñadirInvento(gestor);
         await pausar();
         break;
       case 'delete':
-        console.log('\n[TODO: Eliminar invento]');
-        await pausar();
         await flujoEliminarInvento(gestor);
         await pausar();
         break;

@@ -30,14 +30,10 @@ export async function menuLocalizaciones(gestor: GestorMultiverso): Promise<void
 
     switch (respuesta.accion) {
       case 'add':
-        console.log('\n[TODO: Añadir localización]');
-        await pausar();
         await flujoAñadirLocalizacion(gestor);
         await pausar();
         break;
       case 'delete':
-        console.log('\n[TODO: Eliminar localización]');
-        await pausar();
         await flujoEliminarLocalizacion(gestor);
         await pausar();
         break;
