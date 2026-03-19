@@ -1,4 +1,4 @@
-import { Character } from '../interfaces/character.js';
+import { Character, FiltroPersonajes, OrdenPersonajes } from '../interfaces/character.js';
 import { Low } from 'lowdb';
 
 import { Data } from '../database/db.js';
@@ -80,5 +80,42 @@ export class GestorPersonajes {
     await this.db.update(({ personajes }) => {
       personajes[index] = { ...personajes[index], ...nuevosDatos };
     });
+  }
+
+  public consultarPersonajes(filtro?: FiltroPersonajes, orden?: OrdenPersonajes): Character[] {
+    // Hacemos una copia del array para no mutar el original de la base de datos al ordenar
+    let resultado = [...this.db.data.personajes];
+
+    // Aplicar filtros si existen
+    if (filtro) {
+      resultado = resultado.filter(p => {
+        let coincide = true;
+        
+        // El nombre debe ser una búsqueda parcial
+        if (filtro.name && !p.name.toLowerCase().includes(filtro.name.toLowerCase())) coincide = false;
+        
+        // El resto de filtros son coincidencias exactas
+        if (filtro.speciesId && p.speciesId !== filtro.speciesId) coincide = false;
+        if (filtro.dimensionId && p.dimensionId !== filtro.dimensionId) coincide = false;
+        if (filtro.state && p.state !== filtro.state) coincide = false;
+        if (filtro.affiliation && p.affiliation !== filtro.affiliation) coincide = false;
+        
+        return coincide;
+      });
+    }
+
+    // Aplicar ordenación
+    if (orden) {
+      resultado.sort((a, b) => {
+        const valorA = a[orden.campo];
+        const valorB = b[orden.campo];
+
+        if (valorA < valorB) return orden.direccion === 'asc' ? -1 : 1;
+        if (valorA > valorB) return orden.direccion === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return resultado;
   }
 }

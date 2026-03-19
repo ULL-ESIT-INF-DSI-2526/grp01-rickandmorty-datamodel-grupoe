@@ -1,5 +1,5 @@
 import prompts from 'prompts';
-import { Character } from '../interfaces/character.js';
+import { Character, FiltroPersonajes, OrdenPersonajes } from '../interfaces/character.js';
 import { GestorMultiverso } from '../gestor/gestor.js';
 
 
@@ -44,7 +44,7 @@ export async function menuPersonajes(gestor: GestorMultiverso): Promise<void> {
         await pausar();
         break;
       case 'consult':
-        console.log('\n[TODO: Consultar y ordenar personajes]');
+        await flujoConsultarPersonajes(gestor);
         await pausar();
         break;
       case 'alternates':
@@ -272,5 +272,91 @@ export async function flujoModificarPersonaje(gestor: GestorMultiverso): Promise
     if (nuevoValor !== undefined) {
       (copiaPersonaje as any)[menuEdicion.campo] = nuevoValor;
     }
+  }
+}
+
+export async function flujoConsultarPersonajes(gestor: GestorMultiverso): Promise<void> {
+  console.log('\n--- CONSULTAR Y ORDENAR PERSONAJES ---');
+
+  const { campoFiltro } = await prompts({
+    type: 'select',
+    name: 'campoFiltro',
+    message: '¿Por qué atributo deseas filtrar?',
+    choices: [
+      { title: 'Sin filtro (Mostrar todos)', value: 'ninguno' },
+      { title: 'Nombre', value: 'name' },
+      { title: 'Especie (ID)', value: 'speciesId' },
+      { title: 'Dimensión (ID)', value: 'dimensionId' },
+      { title: 'Estado vital', value: 'state' },
+      { title: 'Afiliación', value: 'affiliation' }
+    ]
+  });
+
+  if (!campoFiltro) return;
+
+  let filtro: FiltroPersonajes | undefined = undefined;
+
+  if (campoFiltro !== 'ninguno') {
+    let tipoInput: any = 'text';
+    let opciones = undefined;
+
+    if (campoFiltro === 'state') {
+      tipoInput = 'select';
+      opciones = [
+        { title: 'vivo', value: 'vivo' },
+        { title: 'muerto', value: 'muerto' },
+        { title: 'desconocido', value: 'desconocido' },
+        { title: 'Robot-sustituto', value: 'robot' }
+      ];
+    }
+
+    const { valorFiltro } = await prompts({
+      type: tipoInput,
+      name: 'valorFiltro',
+      message: `Introduce el valor para buscar por ${campoFiltro}:`,
+      choices: opciones
+    });
+
+    if (valorFiltro === undefined) return;
+    filtro = { [campoFiltro]: valorFiltro };
+  }
+
+  const { campoOrden } = await prompts({
+    type: 'select',
+    name: 'campoOrden',
+    message: '¿Cómo deseas ordenar los resultados?',
+    choices: [
+      { title: 'Sin ordenación', value: 'ninguno' },
+      { title: 'Por Nombre', value: 'name' },
+      { title: 'Por Inteligencia', value: 'nivelIntelligence' }
+    ]
+  });
+
+  if (!campoOrden) return;
+
+  let orden: OrdenPersonajes | undefined = undefined;
+
+  if (campoOrden !== 'ninguno') {
+    const { direccion } = await prompts({
+      type: 'select',
+      name: 'direccion',
+      message: '¿En qué dirección?',
+      choices: [
+        { title: 'Ascendente', value: 'asc' },
+        { title: 'Descendente', value: 'desc' }
+      ]
+    });
+
+    if (!direccion) return;
+    orden = { campo: campoOrden, direccion: direccion };
+  }
+
+  const resultados = gestor.personajes.consultarPersonajes(filtro, orden);
+
+  console.log('\n--- RESULTADOS DE LA BÚSQUEDA ---');
+  if (resultados.length === 0) {
+    console.log('No se encontraron personajes con esos criterios.');
+  } else {
+    console.table(resultados, ['id', 'name', 'speciesId', 'dimensionId', 'state', 'nivelIntelligence', 'affiliation']);
   }
 }

@@ -17,3 +17,16 @@ export interface Character {
   nivelIntelligence: number;
   description: string;
 }
+
+export interface FiltroPersonajes {
+  name?: string;
+  speciesId?: string;
+  dimensionId?: string;
+  state?: string;
+  affiliation?: string;
+}
+
+export interface OrdenPersonajes {
+  campo: 'name' | 'nivelIntelligence';
+  direccion: 'asc' | 'desc';
+}
