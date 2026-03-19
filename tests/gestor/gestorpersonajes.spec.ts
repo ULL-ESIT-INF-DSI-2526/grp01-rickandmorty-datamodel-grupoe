@@ -21,8 +21,11 @@ describe('GestorPersonajes - Pruebas Unitarias', () => {
     dbTest.data.personajes = [];
     
     // Añadimos una dimensión de prueba para que los personajes puedan referenciarla sin problemas
+    // Añadimos las dimensiones necesarias para que pasen las validaciones de los tests
     dbTest.data.dimensiones = [
-      { id: 'C-137', name: 'Tierra', state: 'activa', nivelTecnolog: 10, description: '...' }
+      { id: 'C-137', name: 'Tierra', state: 'activa', nivelTecnolog: 10, description: '...' },
+      { id: 'Z-Alpha', name: 'Ciudadela', state: 'activa', nivelTecnolog: 10, description: '...' },
+      { id: 'J19', name: 'Dimensión Doofus', state: 'activa', nivelTecnolog: 6, description: '...' }
     ];
     await dbTest.write();
 
@@ -117,5 +120,68 @@ describe('GestorPersonajes - Pruebas Unitarias', () => {
     await expect(
       gestor.modificarPersonaje('P-1', { nivelIntelligence: 15 })
     ).rejects.toThrow('El nivel de inteligencia debe estar entre 1 y 10.');
+  });
+
+  it ('debería filtrar personajes por atributo exacto o parcial', async () => {
+    const p1: Character = { id: 'P-1', name: 'Rick Sanchez', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 10, description: '' };
+    const p2: Character = { id: 'P-2', name: 'Morty Smith', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Familia Smith', nivelIntelligence: 5, description: '' };
+    const p3: Character = { id: 'P-3', name: 'Evil Morty', speciesId: 'sp-1', dimensionId: 'Z-Alpha', state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 10, description: '' };
+    
+    await gestor.agregarPersonaje(p1);
+    await gestor.agregarPersonaje(p2);
+    await gestor.agregarPersonaje(p3);
+
+    let resultado = gestor.consultarPersonajes({ dimensionId: 'C-137' });
+    expect(resultado).toHaveLength(2);
+
+    resultado = gestor.consultarPersonajes({ name: 'morty' });
+    expect(resultado).toHaveLength(2);
+
+    resultado = gestor.consultarPersonajes({ affiliation: 'Independiente', state: 'vivo' });
+    expect(resultado).toHaveLength(2);
+    expect(resultado.map(p => p.name)).toContain('Rick Sanchez');
+  });
+
+  it ('debería ordenar personajes por nombre (ascendente y descendente)', async () => {
+    await gestor.agregarPersonaje({ id: 'P-1', name: 'Zebra', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: '', nivelIntelligence: 5, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-2', name: 'Avocado', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: '', nivelIntelligence: 5, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-3', name: 'Morty', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: '', nivelIntelligence: 5, description: '' });
+
+    let resultado = gestor.consultarPersonajes({}, { campo: 'name', direccion: 'asc' });
+    expect(resultado[0].name).toBe('Avocado');
+    expect(resultado[2].name).toBe('Zebra');
+
+    resultado = gestor.consultarPersonajes({}, { campo: 'name', direccion: 'desc' });
+    expect(resultado[0].name).toBe('Zebra');
+    expect(resultado[2].name).toBe('Avocado');
+  });
+
+  it ('debería ordenar personajes por inteligencia (ascendente y descendente)', async () => {
+    await gestor.agregarPersonaje({ id: 'P-1', name: 'Rick', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: '', nivelIntelligence: 10, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-2', name: 'Jerry', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: '', nivelIntelligence: 2, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-3', name: 'Morty', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: '', nivelIntelligence: 5, description: '' });
+
+    let resultado = gestor.consultarPersonajes({}, { campo: 'nivelIntelligence', direccion: 'asc' });
+    expect(resultado[0].name).toBe('Jerry');
+    expect(resultado[2].name).toBe('Rick');
+
+    resultado = gestor.consultarPersonajes({}, { campo: 'nivelIntelligence', direccion: 'desc' });
+    expect(resultado[0].name).toBe('Rick');  
+    expect(resultado[2].name).toBe('Jerry'); 
+  });
+
+  it ('debería combinar filtros y ordenación simultáneamente', async () => {
+    await gestor.agregarPersonaje({ id: 'P-1', name: 'Rick Sanchez', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 10, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-2', name: 'Rick Tonto', speciesId: 'sp-1', dimensionId: 'J19', state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 4, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-3', name: 'Morty', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Familia', nivelIntelligence: 5, description: '' });
+
+    const resultado = gestor.consultarPersonajes(
+      { affiliation: 'Independiente' }, 
+      { campo: 'nivelIntelligence', direccion: 'desc' }
+    );
+
+    expect(resultado).toHaveLength(2);
+    expect(resultado[0].name).toBe('Rick Sanchez');
+    expect(resultado[1].name).toBe('Rick Tonto');  
   });
 });
