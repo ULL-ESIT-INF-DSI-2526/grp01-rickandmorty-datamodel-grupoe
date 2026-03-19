@@ -50,7 +50,7 @@ describe('GestorInventos - Pruebas Unitarias', () => {
 
   it ('debería lanzar un error al agregar un invento con inventor inexistente', async () => {
     const inventoInvalido: Invention = { id: 'I-2', name: 'Time Machine', inventorId: '999', type: 'Gadget', nivelDanger: 7, description: '...' };  
-    expect(gestor.agregarInvento(inventoInvalido)).rejects.toThrow('El inventor con ID 999 no existe en el multiverso.');
+    await expect(gestor.agregarInvento(inventoInvalido)).rejects.toThrow('El inventor con ID 999 no existe en el multiverso.');
   });
 
   it ('debería eliminar un invento correctamente', async () => {
