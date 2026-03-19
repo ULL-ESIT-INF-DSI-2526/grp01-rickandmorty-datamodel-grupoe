@@ -18,7 +18,9 @@ export default defineConfig([
   {
     rules: {
       "prefer-const": "off",
-      "tsdoc/syntax": "warn"
+      "tsdoc/syntax": "warn",
+      "no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "off"
     }
   },
   {ignores: [

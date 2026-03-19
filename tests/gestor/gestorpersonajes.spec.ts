@@ -77,5 +77,45 @@ describe('GestorPersonajes - Pruebas Unitarias', () => {
     expect(personajes).include(personaje2);
   });
 
+  it ('debería modificar los campos de un personaje correctamente', async () => {
+    const personaje: Character = { id: 'P-1', name: 'Rick', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Familia', nivelIntelligence: 10, description: 'Original' };
+    await gestor.agregarPersonaje(personaje);
 
+    await gestor.modificarPersonaje('P-1', { 
+      name: 'Rick Pepinillo', 
+      nivelIntelligence: 9 
+    });
+
+    const personajes = gestor.obtenerPersonajes();
+    const personajeModificado = personajes.find(p => p.id === 'P-1');
+
+    expect(personajeModificado?.name).toBe('Rick Pepinillo');
+    expect(personajeModificado?.nivelIntelligence).toBe(9);
+    expect(personajeModificado?.state).toBe('vivo');
+    expect(personajeModificado?.dimensionId).toBe('C-137');
+  });
+
+  it ('debería lanzar un error al intentar modificar un personaje que no existe', async () => {
+    await expect(
+      gestor.modificarPersonaje('P-INVENTADO', { name: 'Morty Malvado' })
+    ).rejects.toThrow('No existe un personaje con el ID P-INVENTADO');
+  });
+
+  it ('debería lanzar un error al modificar un personaje asignándole una dimensión inexistente', async () => {
+    const personaje: Character = { id: 'P-1', name: 'Rick', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Familia', nivelIntelligence: 10, description: '...' };
+    await gestor.agregarPersonaje(personaje);
+
+    await expect(
+      gestor.modificarPersonaje('P-1', { dimensionId: 'DIMENSION_FALSA' })
+    ).rejects.toThrow('La dimensión de origen DIMENSION_FALSA no existe en el multiverso.');
+  });
+
+  it ('debería lanzar un error al modificar un personaje asignándole una inteligencia fuera del rango 1-10', async () => {
+    const personaje: Character = { id: 'P-1', name: 'Rick', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Familia', nivelIntelligence: 10, description: '...' };
+    await gestor.agregarPersonaje(personaje);
+
+    await expect(
+      gestor.modificarPersonaje('P-1', { nivelIntelligence: 15 })
+    ).rejects.toThrow('El nivel de inteligencia debe estar entre 1 y 10.');
+  });
 });
