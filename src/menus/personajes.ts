@@ -46,6 +46,8 @@ export async function menuPersonajes(gestor: GestorMultiverso): Promise<void> {
       case 'update':
         console.log('\n[TODO: Modificar personaje]');
         await pausar();
+        await flujoModificarPersonaje(gestor);
+        await pausar();
         break;
       case 'consult':
         console.log('\n[TODO: Consultar y ordenar personajes]');
@@ -167,5 +169,114 @@ async function flujoEliminarPersonaje(gestor: GestorMultiverso): Promise<void> {
     console.log('\n¡Personaje eliminado exitosamente!');
   } catch (error: any) {
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
+  }
+}
+
+/**
+ * Flujo interactivo para seleccionar y modificar los campos de un personaje uno a uno.
+ */
+export async function flujoModificarPersonaje(gestor: GestorMultiverso): Promise<void> {
+  console.log('\n--- MODIFICAR PERSONAJE ---');
+  const personajes = gestor.personajes.obtenerPersonajes();
+  
+  if (personajes.length === 0) {
+    console.log('\nNo hay personajes registrados en el multiverso.');
+    return;
+  }
+
+  // Selección de personaje a modificar
+  const respuestaId = await prompts({
+    type: 'select',
+    name: 'id',
+    message: 'Selecciona el personaje que deseas modificar:',
+    choices: personajes.map(p => ({ title: `${p.name} (ID: ${p.id})`, value: p.id }))
+  });
+
+  if (!respuestaId.id) return;
+
+  // Creación de una copia temporal del personaje para no modificar el original
+  const personajeOriginal = personajes.find(p => p.id === respuestaId.id)!;
+  let copiaPersonaje = { ...personajeOriginal };
+  let editando = true;
+
+  // Bucle para mostrar el menú de edición hasta que el usuario decida guardar o cancelar
+  while (editando) {
+    console.clear();
+    console.log('--- EDITANDO PERSONAJE ---');
+    console.log('Datos actuales que se van a guardar:');
+    console.table(copiaPersonaje);
+    console.log('--------------------------\n');
+
+    const menuEdicion = await prompts({
+      type: 'select',
+      name: 'campo',
+      message: '¿Qué campo deseas modificar?',
+      choices: [
+        { title: '1. Nombre', value: 'name' },
+        { title: '2. ID Especie', value: 'speciesId' },
+        { title: '3. ID Dimensión', value: 'dimensionId' },
+        { title: '4. Estado vital', value: 'state' },
+        { title: '5. Afiliación', value: 'affiliation' },
+        { title: '6. Nivel de Inteligencia', value: 'nivelIntelligence' },
+        { title: '7. Descripción', value: 'description' },
+        { title: '8. Guardar cambios y salir', value: 'guardar' },
+        { title: '9. Descartar cambios y salir', value: 'cancelar' }
+      ]
+    });
+
+    if (!menuEdicion.campo || menuEdicion.campo === 'cancelar') {
+      console.log('\nModificación descartada.');
+      editando = false;
+      continue;
+    }
+
+    if (menuEdicion.campo === 'guardar') {
+      try {
+        await gestor.personajes.modificarPersonaje(respuestaId.id, copiaPersonaje);
+        console.log('\n¡Personaje actualizado y guardado con éxito!');
+      } catch (error: any) {
+        console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
+      }
+      editando = false;
+      continue;
+    }
+
+    // Dependiendo del campo seleccionado, el tipo de prompt puede variar (texto, número, selección)
+    let tipoPrompt: any = 'text';
+    let opcionesSelect: any = undefined;
+    
+    // Obtenemos el valor actual que tiene el personaje en ese campo
+    let valorInicial: any = copiaPersonaje[menuEdicion.campo as keyof Character];
+
+    if (menuEdicion.campo === 'state') {
+      tipoPrompt = 'select';
+      opcionesSelect = [
+        { title: 'vivo', value: 'vivo' },
+        { title: 'muerto', value: 'muerto' },
+        { title: 'desconocido', value: 'desconocido' },
+        { title: 'Robot-sustituto', value: 'robot' }
+      ];
+      
+      const indiceEstado = opcionesSelect.findIndex((opcion: any) => opcion.value === valorInicial);
+      valorInicial = indiceEstado !== -1 ? indiceEstado : 0;
+
+    } else if (menuEdicion.campo === 'nivelIntelligence') {
+      tipoPrompt = 'number';
+    }
+
+    const { nuevoValor } = await prompts({
+      type: tipoPrompt,
+      name: 'nuevoValor',
+      message: `Introduce el nuevo valor para ${menuEdicion.campo}:`,
+      initial: valorInicial,
+      choices: opcionesSelect,
+      min: menuEdicion.campo === 'nivelIntelligence' ? 1 : undefined,
+      max: menuEdicion.campo === 'nivelIntelligence' ? 10 : undefined
+    });
+
+    // Aplicar el cambio a la copia temporal
+    if (nuevoValor !== undefined) {
+      (copiaPersonaje as any)[menuEdicion.campo] = nuevoValor;
+    }
   }
 }

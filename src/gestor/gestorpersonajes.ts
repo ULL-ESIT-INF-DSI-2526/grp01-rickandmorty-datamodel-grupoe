@@ -53,4 +53,32 @@ export class GestorPersonajes {
   public obtenerPersonajes(): Character[] {
     return this.db.data.personajes;
   }
+
+  /**
+   * Modifica un personaje existente sustituyendo sus datos por los nuevos.
+   */
+  public async modificarPersonaje(id: string, nuevosDatos: Partial<Character>): Promise<void> {
+    const index = this.db.data.personajes.findIndex(p => p.id === id);
+    if (index === -1) {
+      throw new Error(`No existe un personaje con el ID ${id}`);
+    }
+
+    if (nuevosDatos.dimensionId) {
+      const dimensionExiste = this.db.data.dimensiones.find(d => d.id === nuevosDatos.dimensionId);
+      if (!dimensionExiste) {
+        throw new Error(`La dimensión de origen ${nuevosDatos.dimensionId} no existe en el multiverso.`);
+      }
+    }
+
+    if (nuevosDatos.nivelIntelligence) {
+      if (nuevosDatos.nivelIntelligence < 1 || nuevosDatos.nivelIntelligence > 10) {
+        throw new Error('El nivel de inteligencia debe estar entre 1 y 10.');
+      }
+    }
+    
+    // Actualizamos en base de datos
+    await this.db.update(({ personajes }) => {
+      personajes[index] = { ...personajes[index], ...nuevosDatos };
+    });
+  }
 }
