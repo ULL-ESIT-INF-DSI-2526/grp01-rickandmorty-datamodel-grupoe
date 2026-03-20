@@ -22,7 +22,8 @@ describe('GestorLocalizaciones - Pruebas Unitarias', () => {
 
     // Añadimos una dimensión de prueba para que los personajes puedan referenciarla sin problemas
     dbTest.data.dimensiones = [
-      { id: 'C-137', name: 'Tierra', state: 'activa', nivelTecnolog: 10, description: '...' }
+      { id: 'C-137', name: 'Tierra', state: 'activa', nivelTecnolog: 10, description: '...' },
+      { id: 'J19', name: 'Dimensión Doofus', state: 'activa', nivelTecnolog: 6, description: '...' }
     ];
     await dbTest.write();
 
@@ -69,5 +70,22 @@ describe('GestorLocalizaciones - Pruebas Unitarias', () => {
     expect(localizaciones).toHaveLength(2);
     expect(localizaciones).include(localizacion1);
     expect(localizaciones).include(localizacion2);
+  });
+
+  it ('Debería de modificar los campos de una localización', async () => {
+    const localizacion: Location = { id: 'L-6', name: 'Planeta DEF', type: 'Planeta', dimensionId: 'C-137', population: 3000, description: 'Un lugar' };
+    await gestor.agregarLocalizacion(localizacion);
+
+    await gestor.modificarLocalizacion('L-6', { name: 'Planeta DEF Modificado', type: 'Simulación', dimensionId: 'J19', population: 3500, description: 'Un lugar modificado' });
+    
+    const localizaciones = gestor.obtenerLocalizaciones();
+    const localizacionModificada = localizaciones.find(l => l.id === 'L-6');
+
+    expect(localizacionModificada?.name).toBe('Planeta DEF Modificado');
+    expect(localizacionModificada?.population).toBe(3500);
+    expect(localizacionModificada?.description).toBe('Un lugar modificado');
+    expect(localizacionModificada?.type).toBe('Simulación');
+    expect(localizacionModificada?.dimensionId).toBe('J19');
+
   });
 });
