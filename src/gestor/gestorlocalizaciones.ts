@@ -1,6 +1,5 @@
 import { Location } from '../interfaces/location.js';
 import { Low } from 'lowdb';
-
 import { Data } from '../database/db.js';
 
 export class GestorLocalizaciones {
@@ -52,4 +51,22 @@ export class GestorLocalizaciones {
     return this.db.data.ubicaciones;  
   }
 
+  /**
+   * Modifica una localización existente sustituyendo sus datos por los nuevos.
+   */
+  public async modificarLocalizacion(id: string, nuevosDatos: Partial<Location>): Promise<void> {
+    const lugar = this.db.data.ubicaciones.findIndex(l => l.id === id);
+    if (lugar === -1) {
+      throw new Error(`No existe una localización con el ID ${id}`);
+    }
+    if (nuevosDatos.dimensionId) {
+      const dimensionValida = this.db.data.dimensiones.find(d => String(d.id) === String(nuevosDatos.dimensionId));
+      if (!dimensionValida) {
+        throw new Error(`La dimensión de origen ${nuevosDatos.dimensionId} no existe en el multiverso.`);
+      }
+    }
+    await this.db.update(( { ubicaciones }) => {
+      ubicaciones[lugar] = { ...ubicaciones[lugar], ...nuevosDatos };
+    });
+  }
 }

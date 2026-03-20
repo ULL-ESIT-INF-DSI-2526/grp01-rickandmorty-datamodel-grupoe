@@ -38,7 +38,7 @@ export async function menuLocalizaciones(gestor: GestorMultiverso): Promise<void
         await pausar();
         break;
       case 'update':
-        console.log('\n[TODO: Modificar localización]');
+        await flujoModificarLocalizacion(gestor);
         await pausar();
         break;
       case 'consult':
@@ -143,3 +143,103 @@ async function flujoEliminarLocalizacion(gestor: GestorMultiverso): Promise<void
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
+
+async function flujoModificarLocalizacion(gestor: GestorMultiverso): Promise<void> {
+  console.log('\n--- MODIFICAR LOCALIZACIÓN ---');
+  const localizaciones = gestor.localizaciones.obtenerLocalizaciones();
+  if (localizaciones.length === 0) {
+    console.log('\nNo hay localizaciones registradas en el multiverso.');
+    return;
+  }
+  
+  const respuesta = await prompts({
+    type: 'select',
+    name: 'id',
+    message: 'Selecciona la localización que deseas modificar:',
+    choices: localizaciones.map(l => ({ title: `${l.name} (ID: ${l.id})`, value: l.id }))
+  });
+
+  if (!respuesta.id) {
+    console.log('\n-Operación cancelada.-');
+    return;
+  }
+
+  // Copia de la localización original para modificarla
+  const localizacionOriginal = localizaciones.find(l => l.id === respuesta.id);
+  let copia = { ...localizacionOriginal };
+  let edit = true;
+
+  while (edit) {
+    console.clear();
+    console.log('--- MODIFICANDO LOCALIZACIÓN: ---');
+    console.log('Datos actuales que se van a guardar:');
+    console.table(copia);
+    console.log('--------------------------\n');
+
+    const menuEdit = await prompts({
+      type: 'select',
+      name: 'campo',
+      message: '¿Qué campo deseas modificar?',
+      choices: [
+        { title: 'Nombre', value: 'name' },
+        { title: 'Tipo', value: 'type' },
+        { title: 'ID de dimensión', value: 'dimensionId' },
+        { title: 'Población', value: 'population' },
+        { title: 'Descripción', value: 'description' },
+        { title: 'Guardar cambios y salir', value: 'save' },
+        { title: 'Cancelar modificación', value: 'cancelar' }
+      ]
+    });
+
+    if (!menuEdit.campo || menuEdit.campo === 'cancelar') {
+      console.log('\nModificación descartada.');
+      edit = false;
+      continue;
+    }
+
+    if (menuEdit.campo === 'save') {
+      try {
+        await gestor.localizaciones.modificarLocalizacion(respuesta.id, copia);
+        console.log('\n¡Localización modificada exitosamente!');
+      } catch (error: any) {
+        console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
+      }
+      edit = false;
+      continue;
+    }
+
+    let tipoPrompt: 'text' | 'number' | 'select' = 'text';
+
+    // Usamos keyof para el "noImplicitAny"
+    let valorInicial: any = copia[menuEdit.campo as keyof Location];
+
+    // Población positiva o cero
+    if (menuEdit.campo === 'population') {
+      tipoPrompt = 'number';
+      valorInicial = (typeof valorInicial === 'number' && valorInicial >= 0) ? valorInicial : 0;
+    }
+
+    let opcionesDimension: { title: string; value: string }[] = [];
+
+    if (menuEdit.campo === 'dimensionId') {
+      const dimensiones = gestor.dimensiones.obtenerDimensiones();
+      opcionesDimension = dimensiones.map(d => ({ title: `${d.name} (ID: ${d.id})`, value: d.id }));
+      tipoPrompt = 'select';
+
+      const indiceEstado = opcionesDimension.findIndex((opcion: any) => opcion.value === valorInicial);
+      valorInicial = indiceEstado !== -1 ? indiceEstado : 0;
+      }
+
+    const respuestaCampo = await prompts({
+      type: tipoPrompt,
+      name: 'valor',
+      message: `Nuevo valor para ${menuEdit.campo}:`,
+      initial: valorInicial,
+      choices: opcionesDimension.length > 0 ? opcionesDimension : undefined
+    });
+  
+    if (respuestaCampo.valor !== undefined) {
+      (copia as any)[menuEdit.campo] = respuestaCampo.valor; // Actualizamos la copia con el nuevo valor
+    }  
+    }
+  }
