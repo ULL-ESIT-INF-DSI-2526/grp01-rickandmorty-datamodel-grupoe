@@ -88,4 +88,28 @@ describe('GestorLocalizaciones - Pruebas Unitarias', () => {
     expect(localizacionModificada?.dimensionId).toBe('J19');
 
   });
+
+  it ('Consultar localizaciones con filtro', async () => {
+    const localizacion1: Location = { id: 'L-7', name: 'Planeta GHI', type: 'Planeta', dimensionId: 'C-137', population: 4000, description: '...' };
+    const localizacion2: Location = { id: 'L-8', name: 'Ciudad UVW', type: 'Ciudad', dimensionId: 'C-137', population: 6000, description: '...' };
+    const localizacion3: Location = { id: 'L-9', name: 'Planeta JKL', type: 'Planeta', dimensionId: 'J19', population: 4500, description: '...' };
+
+    await gestor.agregarLocalizacion(localizacion1);
+    await gestor.agregarLocalizacion(localizacion2);
+    await gestor.agregarLocalizacion(localizacion3);
+
+    const resultado = gestor.consultarLocalizacion({ type: 'Planeta' });
+    expect(resultado).toHaveLength(2);
+    expect(resultado).include(localizacion1);
+    expect(resultado).include(localizacion3);
+
+    const resultado2 = gestor.consultarLocalizacion({ dimensionId: 'C-137' });
+    expect(resultado2).toHaveLength(2);
+    expect(resultado2).include(localizacion1);
+    expect(resultado2).include(localizacion2);
+
+    const resultado3 = gestor.consultarLocalizacion({ name: 'Ciudad UVW' });
+    expect(resultado3).toHaveLength(1);
+    expect(resultado3[0]).toEqual(localizacion2);
+  });
 });
