@@ -1,5 +1,5 @@
 import prompts from 'prompts';
-import { Invention } from '../interfaces/invention.js';
+import { Invention, FiltroInventos } from '../interfaces/invention.js';
 import { GestorMultiverso } from '../gestor/gestor.js';
 
 
@@ -42,7 +42,7 @@ export async function menuInventos(gestor: GestorMultiverso): Promise<void> {
         await pausar();
         break;
       case 'consult':
-        console.log('\n[TODO: Consultar inventos]');
+        await flujoConsultarInventos(gestor);
         await pausar();
         break;
       case 'back':
@@ -226,5 +226,74 @@ async function flujoModificarInvento(gestor: GestorMultiverso): Promise<void> {
     if (respuestaCampo.valor !== undefined) {
       (copia as any)[menuEdit.campo] = respuestaCampo.valor;
     }
+  }
+}
+
+async function flujoConsultarInventos(gestor: GestorMultiverso): Promise<void> {
+  console.log('\n--- CONSULTAR INVENTOS ---');
+
+  const campoFiltro = await prompts({
+    type: 'select',
+    name: 'campo',
+    message: '¿Por qué atributo deseas filtrar?',
+    choices: [
+      { title: 'Nombre', value: 'name' },
+      { title: 'Tipo', value: 'type' },
+      { title: 'ID del inventor', value: 'inventorId' },
+      { title: 'Nivel de peligro', value: 'nivelDanger' },
+      { title: 'Sin filtro (mostrar todo)', value: 'none' }
+    ]
+  });
+
+  if (!campoFiltro.campo) return;
+
+  let valorFiltro: FiltroInventos | undefined = undefined;
+
+  if (campoFiltro.campo !== 'none') {
+    let tipoPrompt: 'text' | 'number' | 'select' = 'text';
+    let opciones = undefined;
+
+    if (campoFiltro.campo === 'type') {
+      const tipos = Array.from(new Set(gestor.inventos.obtenerInventos().map(i => i.type).filter(t => t)));
+      
+      if (tipos.length === 0) {
+        console.log('\nNo hay tipos de inventos registrados en el multiverso.');
+        return;
+      }
+  
+      opciones = tipos.map(t => ({ title: t!, value: t! }));
+      tipoPrompt = 'select';
+    } else if (campoFiltro.campo === 'nivelDanger') {
+      tipoPrompt = 'number';
+    } else if (campoFiltro.campo === 'inventorId') {
+      const inventores = gestor.personajes.obtenerPersonajes();
+      opciones = inventores.map(p => ({ title: `${p.name} (ID: ${p.id})`, value: p.id }));
+      tipoPrompt = 'select';
+    } else if (campoFiltro.campo === 'name') {
+      tipoPrompt = 'text';
+    }
+    
+    const { valor } = await prompts({
+      type: tipoPrompt,
+      name: 'valor',
+      message: `Valor para filtrar por ${campoFiltro.campo}:`,
+      choices: opciones,
+      min: campoFiltro.campo === 'nivelDanger' ? 1 : undefined,
+      max: campoFiltro.campo === 'nivelDanger' ? 10 : undefined
+
+    });
+
+    if (!valor) return;
+
+    valorFiltro = { [campoFiltro.campo]: valor };
+  }
+
+  const resultados = await gestor.inventos.consultarInventos(valorFiltro);
+
+  console.log(`\n--- RESULTADOS DE LA CONSULTA ---`);
+  if (resultados.length === 0) {
+    console.log('No se encontraron inventos que coincidan con el filtro.');
+  } else {
+    console.table(resultados, ['id', 'name', 'inventorId', 'type', 'nivelDanger', 'description']);
   }
 }

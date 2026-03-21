@@ -63,4 +63,28 @@ export class GestorInventos {
       invenciones[invent] = { ...invenciones[invent], ...nuevosDatos };
     });
   }
+
+  public async consultarInventos(filtro?: Partial<Invention>): Promise<Invention[]> {
+    let resultados = this.db.data.invenciones;
+
+    if (filtro) {
+      resultados = resultados.filter(i => {
+        let coincide = true;
+        if (filtro.name && !i.name.toLowerCase().includes(filtro.name.toLowerCase())) {
+          coincide = false;
+        }
+        if (filtro.type && i.type?.toLowerCase() !== filtro.type.toLowerCase()) {
+          coincide = false;
+        }
+        if (filtro.inventorId && i.inventorId !== filtro.inventorId) {
+          coincide = false;
+        }
+        if (filtro.nivelDanger && i.nivelDanger !== filtro.nivelDanger) {
+          coincide = false;
+        }
+        return coincide;
+      });
+    }
+    return resultados;
+  }
 }

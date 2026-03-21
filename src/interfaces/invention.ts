@@ -9,3 +9,10 @@ export interface Invention {
   nivelDanger: number; // Nivel de peligro de la invención, en una escala del 1 al 10
   description: string;
 }
+
+export interface FiltroInventos {
+  name?: string;
+  type?: string;
+  inventorId?: string;
+  nivelDanger?: number;
+}
