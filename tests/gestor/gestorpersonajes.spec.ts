@@ -184,4 +184,19 @@ describe('GestorPersonajes - Pruebas Unitarias', () => {
     expect(resultado[0].name).toBe('Rick Sanchez');
     expect(resultado[1].name).toBe('Rick Tonto');  
   });
+
+  it ('debería localizar versiones alternativas de un personaje', async () => {
+    await gestor.agregarPersonaje({ id: 'P-1', name: 'Rick Sanchez', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 10, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-2', name: 'Rick Sanchez', speciesId: 'sp-1', dimensionId: 'Z-Alpha', state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 9, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-3', name: 'Rick Sanchez', speciesId: 'sp-1', dimensionId: 'J19', state: 'vivo', affiliation: 'Independiente', nivelIntelligence: 6, description: '' });
+    await gestor.agregarPersonaje({ id: 'P-4', name: 'Morty', speciesId: 'sp-1', dimensionId: 'C-137', state: 'vivo', affiliation: 'Familia', nivelIntelligence: 5, description: '' });
+
+    const versionesRick = gestor.localizarVersionesAlternativas('P-1');
+    expect(versionesRick).toHaveLength(2);
+    expect(versionesRick.map(v => v.dimensionId)).toContain('Z-Alpha');
+    expect(versionesRick.map(v => v.dimensionId)).toContain('J19');
+
+    const versionesMorty = gestor.localizarVersionesAlternativas('P-4');
+    expect(versionesMorty).toHaveLength(0);
+  });
 });
