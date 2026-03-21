@@ -1,5 +1,5 @@
 import prompts from 'prompts';
-import { Location } from '../interfaces/location.js';
+import { Location, FiltroLocalizaciones } from '../interfaces/location.js';
 import { GestorMultiverso } from '../gestor/gestor.js';
 
 
@@ -42,7 +42,7 @@ export async function menuLocalizaciones(gestor: GestorMultiverso): Promise<void
         await pausar();
         break;
       case 'consult':
-        console.log('\n[TODO: Consultar localizaciones]');
+        await flujoConsultarLocalizaciones(gestor);
         await pausar();
         break;
       case 'back':
@@ -243,3 +243,48 @@ async function flujoModificarLocalizacion(gestor: GestorMultiverso): Promise<voi
     }  
     }
   }
+
+export async function flujoConsultarLocalizaciones(gestor: GestorMultiverso): Promise<void> {
+  console.log('\n--- CONSULTAR LOCALIZACIONES ---');
+
+  const { campoFiltro } = await prompts({
+    type: 'select',
+    name: 'campoFiltro',
+    message: '¿Por qué atributo deseas filtrar?',
+    choices: [
+      { title: 'Sin filtro (Monstrar todo)', value: 'ninguno' },
+      { title: 'Nombre', value: 'name' },
+      { title: 'Tipo', value: 'type' },
+      { title: 'ID de dimensión', value: 'dimensionId' }
+    ]
+  });
+
+  if (!campoFiltro) return;
+  
+  let filtro: FiltroLocalizaciones | undefined = undefined;
+
+  if (campoFiltro !== 'ninguno') {
+    let tipoInput: 'text' | 'number' | 'select' = 'text';
+    let opciones = undefined;
+
+    const { valorFiltro } = await prompts({
+      type: tipoInput,
+      name: 'valorFiltro',
+      message: `Valor para filtrar por ${campoFiltro}:`,
+      choices: opciones
+    });
+
+    if (!valorFiltro) return;
+
+    filtro = { [campoFiltro]: valorFiltro };
+  }
+
+  const resultado = gestor.localizaciones.consultarLocalizacion(filtro);
+
+  console.log(`\n--- RESULTADOS DE LA BÚSQUEDA ---`);
+  if (resultado.length === 0) {
+    console.log('No se encontraron localizaciones que coincidan con el filtro aplicado.');
+  } else {
+    console.table(resultado, ['id', 'name', 'type', 'dimensionId', 'population']);
+  }
+}

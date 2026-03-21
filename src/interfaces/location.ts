@@ -9,3 +9,9 @@ export interface Location {
   population: number;
   description: string;
 }
+
+export interface FiltroLocalizaciones {
+  name?: string;
+  type?: string;
+  dimensionId?: string;
+}

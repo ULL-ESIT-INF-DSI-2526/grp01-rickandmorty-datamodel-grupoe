@@ -1,4 +1,4 @@
-import { Location } from '../interfaces/location.js';
+import { Location, FiltroLocalizaciones } from '../interfaces/location.js';
 import { Low } from 'lowdb';
 import { Data } from '../database/db.js';
 
@@ -68,5 +68,27 @@ export class GestorLocalizaciones {
     await this.db.update(( { ubicaciones }) => {
       ubicaciones[lugar] = { ...ubicaciones[lugar], ...nuevosDatos };
     });
+  }
+
+
+public consultarLocalizacion(filtro?: FiltroLocalizaciones): Location[] {
+  let localizaciones = [...this.db.data.ubicaciones];
+
+  if (filtro) {
+    localizaciones = localizaciones.filter(loc => { 
+      let coincide = true;
+      if (filtro.name && !loc.name.toLowerCase().includes(filtro.name.toLowerCase())) {
+        coincide = false;
+      }
+      if (filtro.type && loc.type.toLowerCase() !== filtro.type.toLowerCase()) {
+        coincide = false;
+      }
+      if (filtro.dimensionId && String(loc.dimensionId) !== String(filtro.dimensionId)) {
+        coincide = false;
+      }
+      return coincide;
+    });
+  }
+    return localizaciones;
   }
 }
