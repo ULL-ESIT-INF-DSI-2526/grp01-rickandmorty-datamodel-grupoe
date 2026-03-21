@@ -84,4 +84,58 @@ describe('GestorInventos - Pruebas Unitarias', () => {
     expect(inventos[0].name).toBe('Invisibility Cloak v2');
     expect(inventos[0].nivelDanger).toBe(3);
   });
+
+  it ('deberia lanzar un error al modificar un invento inexistente', async () => {
+    await expect(gestor.modificarInvento('I-999', { name: 'Nonexistent Invention' })).rejects.toThrow('No existe un invento con el ID I-999');
+  });
+
+  it ('deberia filtrar inventos por tipo', async () => {
+    const invento1: Invention = { id: 'I-7', name: 'Grappling Hook', inventorId: '1', type: 'Gadget', nivelDanger: 3, description: '...' };
+    const invento2: Invention = { id: 'I-8', name: 'Laser Gun', inventorId: '1', type: 'Weapon', nivelDanger: 8, description: '...' };
+    
+    await gestor.agregarInvento(invento1);
+    await gestor.agregarInvento(invento2);
+
+    const resultados = await gestor.consultarInventos({ type: 'Gadget' });
+    expect(resultados).toHaveLength(1);
+    expect(resultados[0].id).toBe('I-7');
+  });
+  
+  it ('deberia filtrar inventos por nivel de peligro', async () => {
+    const invento1: Invention = { id: 'I-9', name: 'Freeze Ray', inventorId: '1', type: 'Weapon', nivelDanger: 7, description: '...' };
+    const invento2: Invention = { id: 'I-10', name: 'Flamethrower', inventorId: '1', type: 'Weapon', nivelDanger: 9, description: '...' };
+
+    await gestor.agregarInvento(invento1);
+    await gestor.agregarInvento(invento2);
+
+    const resultados = await gestor.consultarInventos({ nivelDanger: 7 });
+    expect(resultados).toHaveLength(1);
+    expect(resultados[0].id).toBe('I-9');
+  });
+
+  it ('deberia filtrar inventos por inventor', async () => {
+    const invento1: Invention = { id: 'I-11', name: 'Gravity Boots', inventorId: '1', type: 'Gadget', nivelDanger: 4, description: '...' };
+    const invento2: Invention = { id: 'I-12', name: 'Mind Control Helmet', inventorId: '1', type: 'Gadget', nivelDanger: 6, description: '...' };
+
+    await gestor.agregarInvento(invento1);
+    await gestor.agregarInvento(invento2);
+
+    const resultados = await gestor.consultarInventos({ inventorId: '1' });
+    expect(resultados.length).toBeGreaterThanOrEqual(2);
+    const ids = resultados.map(i => i.id);
+    expect(ids).toContain('I-11');
+    expect(ids).toContain('I-12');
+  });
+
+  it ('deberia filtrar inventos por nombre', async () => {
+    const invento1: Invention = { id: 'I-13', name: 'Teleportation Device', inventorId: '1', type: 'Gadget', nivelDanger: 5, description: '...' };
+    const invento2: Invention = { id: 'I-14', name: 'Time Dilation Field', inventorId: '1', type: 'Gadget', nivelDanger: 7, description: '...' };
+
+    await gestor.agregarInvento(invento1);
+    await gestor.agregarInvento(invento2);
+
+    const resultados = await gestor.consultarInventos({ name: 'teleportation' });
+    expect(resultados).toHaveLength(1);
+    expect(resultados[0].id).toBe('I-13');
+  });
 });
