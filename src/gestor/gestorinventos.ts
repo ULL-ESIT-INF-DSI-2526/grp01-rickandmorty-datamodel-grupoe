@@ -54,4 +54,13 @@ export class GestorInventos {
     return this.db.data.invenciones;  
   }
 
+  public async modificarInvento(id: string, nuevosDatos: Partial<Invention>): Promise<void> {
+    const invent = this.db.data.invenciones.findIndex(i => i.id === id);
+    if (invent === -1) {
+      throw new Error(`No existe un invento con el ID ${id}`);
+    }
+    await this.db.update(( { invenciones }) => {
+      invenciones[invent] = { ...invenciones[invent], ...nuevosDatos };
+    });
+  }
 }

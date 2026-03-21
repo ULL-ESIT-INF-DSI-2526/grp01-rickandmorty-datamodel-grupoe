@@ -38,7 +38,7 @@ export async function menuInventos(gestor: GestorMultiverso): Promise<void> {
         await pausar();
         break;
       case 'update':
-        console.log('\n[TODO: Modificar invento]');
+        await flujoModificarInvento(gestor);
         await pausar();
         break;
       case 'consult':
@@ -142,5 +142,89 @@ async function flujoEliminarInvento(gestor: GestorMultiverso): Promise<void> {
     console.log('\n¡Invento eliminado exitosamente!');
   } catch (error: any) {
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
+  }
+}
+
+async function flujoModificarInvento(gestor: GestorMultiverso): Promise<void> {
+  console.log('\n--- MODIFICAR ESPECIE ---');
+  const inventos = gestor.inventos.obtenerInventos();
+  if (inventos.length === 0) {
+    console.log('\nNo hay inventos registradas en el multiverso.');
+    return;
+  }
+
+  const respuesta = await prompts({
+      type: 'select',
+      name: 'id',
+      message: 'Selecciona el invento que deseas modificar:',
+      choices: inventos.map(i => ({ title: `${i.name} (ID: ${i.id})`, value: i.id }))
+    });
+
+    if (!respuesta.id) {
+      console.log('\n-Operación cancelada.-');
+      return;
+    }
+
+    const inventoSeleccionado = inventos.find(i => i.id === respuesta.id);
+    let copia = { ...inventoSeleccionado };
+    let edit = true;
+
+    while (edit) {
+      console.clear();
+      console.log(`--- MODIFICAR INVENTO: ---`);
+      console.log('Datos actuales que se van a guardar:');
+      console.table(copia);
+      console.log('--------------------------\n');
+
+      const menuEdit = await prompts({
+            type: 'select',
+            name: 'campo',
+            message: '¿Qué campo deseas modificar?',
+            choices: [
+              { title: 'Nombre', value: 'name' },
+              { title: 'Inventor (ID)', value: 'inventorId' },
+              { title: 'Tipo', value: 'type' },
+              { title: 'Nivel de peligro', value: 'nivelDanger' },
+              { title: 'Descripción', value: 'description' },
+              { title: 'Guardar cambios y salir', value: 'save' },
+              { title: 'Salir sin guardar', value: 'exit' }
+            ]
+          });
+
+      if (!menuEdit.campo || menuEdit.campo === 'exit') {
+        console.log('\n-Operación cancelada.-');
+        return;
+      }
+
+      if (menuEdit.campo === 'save') {
+      try {
+        await gestor.inventos.modificarInvento(respuesta.id, copia);
+        console.log('\n¡Invento modificado exitosamente!');
+      } catch (error: any) {
+        console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
+      }
+      edit = false;
+      continue;
+    }
+
+    let tipoPrompt: 'text' | 'number' | 'select' = 'text';
+    let valorInicial: any = copia[menuEdit.campo as keyof Invention];
+    
+    if (menuEdit.campo === 'nivelDanger') {
+      tipoPrompt = 'number';
+    }
+
+    const respuestaCampo = await prompts({
+      type: tipoPrompt,
+      name: 'valor',
+      message: `Nuevo valor para ${menuEdit.campo}:`,
+      initial: valorInicial,
+      min: menuEdit.campo === 'nivelDanger' ? 1 : undefined,
+      max: menuEdit.campo === 'nivelDanger' ? 10 : undefined,
+    });
+
+    if (respuestaCampo.valor !== undefined) {
+      (copia as any)[menuEdit.campo] = respuestaCampo.valor;
+    }
   }
 }
