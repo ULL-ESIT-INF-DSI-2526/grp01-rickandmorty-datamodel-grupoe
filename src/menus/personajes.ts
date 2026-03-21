@@ -236,7 +236,7 @@ export async function flujoModificarPersonaje(gestor: GestorMultiverso): Promise
     }
 
     // Dependiendo del campo seleccionado, el tipo de prompt puede variar (texto, número, selección)
-    let tipoPrompt: any = 'text';
+    let tipoPrompt: 'text' | 'select' | 'number' = 'text';
     let opcionesSelect: any = undefined;
     
     // Obtenemos el valor actual que tiene el personaje en ese campo
