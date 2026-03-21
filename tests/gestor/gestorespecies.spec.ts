@@ -70,4 +70,31 @@ describe('GestorEspecies - Pruebas Unitarias', () => {
     expect(especies).toContainEqual(especie3);
   });
 
+  // test de modificar especie
+  it('debería modificar una especie existente correctamente', async () => {
+    const especieOriginal: Species = { id: 'sp-1', name: 'Humano', origin: 'Tierra', type: 'humanoide', expectancy: 80, description: '...' };
+    await gestor.agregarEspecie(especieOriginal);
+
+    await gestor.modificarEspecie('sp-1', { name: 'Humano Modificado', expectancy: 90, description: 'Descripción actualizada', origin: 'Tierra', type: 'humanoide' });
+
+    const especies = gestor.obtenerEspecies();
+    expect(especies).toHaveLength(1);
+    expect(especies[0]).toEqual({ id: 'sp-1', name: 'Humano Modificado', expectancy: 90, description: 'Descripción actualizada', origin: 'Tierra', type: 'humanoide' });
+  });
+
+  it('debería lanzar un error al intentar modificar una especie que no existe', async () => {
+    await expect(gestor.modificarEspecie('sp-999', {name: 'Especie Fantasma', origin: 'Desconocido', type: 'desconocido', expectancy: 0, description: '...' })).rejects.toThrow(`No existe una especie con el ID sp-999`);
+  });
+
+  it('debería permitir modificar solo algunos campos de la especie sin afectar los demás', async () => {
+    const especieOriginal: Species = { id: 'sp-1', name: 'Humano', origin: 'Tierra', type: 'humanoide', expectancy: 80, description: '...' };
+    await gestor.agregarEspecie(especieOriginal);
+
+    await gestor.modificarEspecie('sp-1', { name: 'Humano Modificado', expectancy: 90, origin: 'Tierra', type: 'humanoide' });
+
+    const especies = gestor.obtenerEspecies();
+    expect(especies).toHaveLength(1);
+    expect(especies[0]).toEqual({ id: 'sp-1', name: 'Humano Modificado', expectancy: 90, description: '...', origin: 'Tierra', type: 'humanoide' });
+  });
+
 });

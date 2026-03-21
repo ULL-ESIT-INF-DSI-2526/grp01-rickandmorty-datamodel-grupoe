@@ -48,4 +48,17 @@ export class GestorEspecies {
     return this.db.data.especies;  
   }
 
+  /**
+   * Función para modificar una especie existente por ID.
+   */
+  public async modificarEspecie(id: string, datosActualizados: Partial<Species>): Promise<void> {
+    const index = this.db.data.especies.findIndex(e => e.id === id);
+    if (index === -1) {
+      throw new Error(`No existe una especie con el ID ${id}`);
+    }
+    await this.db.update(({ especies }) => {
+      especies[index] = { ...especies[index], ...datosActualizados };
+    });
+  }
+
 }
