@@ -70,7 +70,6 @@ describe('GestorEspecies - Pruebas Unitarias', () => {
     expect(especies).toContainEqual(especie3);
   });
 
-  // test de modificar especie
   it('debería modificar una especie existente correctamente', async () => {
     const especieOriginal: Species = { id: 'sp-1', name: 'Humano', origin: 'Tierra', type: 'humanoide', expectancy: 80, description: '...' };
     await gestor.agregarEspecie(especieOriginal);

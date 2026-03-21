@@ -206,25 +206,25 @@ export async function flujoModificarPersonaje(gestor: GestorMultiverso): Promise
       name: 'campo',
       message: '¿Qué campo deseas modificar?',
       choices: [
-        { title: '1. Nombre', value: 'name' },
-        { title: '2. ID Especie', value: 'speciesId' },
-        { title: '3. ID Dimensión', value: 'dimensionId' },
-        { title: '4. Estado vital', value: 'state' },
-        { title: '5. Afiliación', value: 'affiliation' },
-        { title: '6. Nivel de Inteligencia', value: 'nivelIntelligence' },
-        { title: '7. Descripción', value: 'description' },
-        { title: '8. Guardar cambios y salir', value: 'guardar' },
-        { title: '9. Descartar cambios y salir', value: 'cancelar' }
+        { title: 'Nombre', value: 'name' },
+        { title: 'ID Especie', value: 'speciesId' },
+        { title: 'ID Dimensión', value: 'dimensionId' },
+        { title: 'Estado vital', value: 'state' },
+        { title: 'Afiliación', value: 'affiliation' },
+        { title: 'Nivel de Inteligencia', value: 'nivelIntelligence' },
+        { title: 'Descripción', value: 'description' },
+        { title: 'Guardar cambios y salir', value: 'save' },
+        { title: 'Descartar cambios y salir', value: 'cancel' }
       ]
     });
 
-    if (!menuEdicion.campo || menuEdicion.campo === 'cancelar') {
+    if (!menuEdicion.campo || menuEdicion.campo === 'cancel') {
       console.log('\nModificación descartada.');
       editando = false;
       continue;
     }
 
-    if (menuEdicion.campo === 'guardar') {
+    if (menuEdicion.campo === 'save') {
       try {
         await gestor.personajes.modificarPersonaje(respuestaId.id, copiaPersonaje);
         console.log('\n¡Personaje actualizado y guardado con éxito!');

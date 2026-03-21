@@ -74,4 +74,28 @@ describe('GestorPersonajes - Pruebas Unitarias', () => {
     expect(dimensiones).include(dimension2);
   });
 
+  // test de modificar dimensión --- IGNORE ---
+  it('debería modificar una dimensión existente correctamente', async () => {
+    const dimensionOriginal: Dimension = { id: 'D-1', name: 'Tierra', state: 'activa', nivelTecnolog: 10, description: '...' };
+    await gestor.agregarDimension(dimensionOriginal);
+
+    await gestor.modificarDimension('D-1', { name: 'Tierra-Prime', state: 'cuarentena' });
+
+    const dimensiones = gestor.obtenerDimensiones();
+    expect(dimensiones).toHaveLength(1);
+    expect(dimensiones[0].name).toBe('Tierra-Prime');
+    expect(dimensiones[0].state).toBe('cuarentena');
+  });
+
+  it('debería lanzar un error al intentar modificar una dimensión que no existe', async () => {
+    await expect(gestor.modificarDimension('D-999', { name: 'Dimensión Inexistente' })).rejects.toThrow('No existe una dimensión con el ID D-999');
+  });
+
+  it('debería lanzar un error al intentar modificar una dimensión con nivel tecnológico fuera de 1-10', async () => {
+    const dimension: Dimension = { id: 'D-1', name: 'Tierra', state: 'activa', nivelTecnolog: 10, description: '...' };
+    await gestor.agregarDimension(dimension);
+
+    await expect(gestor.modificarDimension('D-1', { nivelTecnolog: 15 })).rejects.toThrow('El nivel tecnológico debe estar entre 1 y 10. Valor recibido: 15');
+  });
+
 });

@@ -173,7 +173,7 @@ async function flujoModificarEspecie(gestor: GestorMultiverso): Promise<void> {
     return;
   }
 
-  let copiaEspecie = { ...especieOriginal } as Species;
+  let copiaEspecie: Species = { ...especieOriginal };
   let editando: boolean = true;
 
   while (editando) {
@@ -188,23 +188,23 @@ async function flujoModificarEspecie(gestor: GestorMultiverso): Promise<void> {
       name: 'campo',
       message: '¿Qué campo deseas modificar?',
       choices: [
-        { title: '1. Nombre', value: 'name' },
-        { title: '2. Planeta/Dimensión origen', value: 'origin' },
-        { title: '3. Tipo', value: 'type' },
-        { title: '4. Esperanza de vida', value: 'expectancy' },
-        { title: '5. Descripción', value: 'description' },
-        { title: '6. Guardar cambios y salir', value: 'guardar' },
-        { title: '7. Descartar cambios y salir', value: 'cancelar' }
+        { title: 'Nombre', value: 'name' },
+        { title: 'Planeta/Dimensión origen', value: 'origin' },
+        { title: 'Tipo', value: 'type' },
+        { title: 'Esperanza de vida', value: 'expectancy' },
+        { title: 'Descripción', value: 'description' },
+        { title: 'Guardar cambios y salir', value: 'save' },
+        { title: 'Descartar cambios y salir', value: 'cancel' }
       ]
     });
 
-    if (!menuEdicion.campo || menuEdicion.campo === 'cancelar') {
+    if (!menuEdicion.campo || menuEdicion.campo === 'cancel') {
       console.log('\nModificación descartada.');
       editando = false;
       continue;
     }
 
-    if (menuEdicion.campo === 'guardar') {
+    if (menuEdicion.campo === 'save') {
       try {
         await gestor.especies.modificarEspecie(respuesta.id, copiaEspecie);
         console.log('\n¡Especie actualizada y guardada con éxito!');
