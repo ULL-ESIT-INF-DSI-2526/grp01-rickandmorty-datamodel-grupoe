@@ -377,21 +377,21 @@ export async function poblarDB() {
         { id: '20', name: 'Plutón', type: 'Planeta', dimensionId: 'D-99', population: 30000000, description: 'Mundo minero obsesionado con recuperar su estatus de planeta.' }
     );
     db.data.invenciones.push(
-        { id: '1', name: 'Pistola de Portales', inventorId: 'char-01', tipo: 'Transporte', nivelDanger: 9, description: 'Permite viajar instantáneamente entre cualquier dimensión.' },
-        { id: '2', name: 'Nave Espacial', inventorId: 'char-01', tipo: 'Vehículo', nivelDanger: 8, description: 'Nave construida con basura que viaja más rápido que la luz.' },
-        { id: '3', name: 'Batería de Microverso', inventorId: 'char-01', tipo: 'Energía', nivelDanger: 10, description: 'Contiene un universo entero esclavizado para generar electricidad.' },
-        { id: '4', name: 'Casco de Inteligencia Canina', inventorId: 'char-01', tipo: 'Mejora Cognitiva', nivelDanger: 7, description: 'Otorga superinteligencia y capacidad de habla a los perros.' },
-        { id: '5', name: 'Caja de Meeseeks', inventorId: 'char-01', tipo: 'Utilidad', nivelDanger: 6, description: 'Invoca a un ser diseñado para cumplir una única tarea.' },
-        { id: '6', name: 'Gafas de Realidad Alternativa', inventorId: 'char-01', tipo: 'Entretenimiento', nivelDanger: 3, description: 'Muestra la vida del usuario en dimensiones paralelas.' },
-        { id: '7', name: 'Traje de Purga', inventorId: 'char-01', tipo: 'Armamento', nivelDanger: 10, description: 'Armadura de combate indestructible con un arsenal letal.' },
-        { id: '8', name: 'Tanques de Clonación', inventorId: 'char-01', tipo: 'Biotecnología', nivelDanger: 8, description: 'Clona el cuerpo y transfiere la consciencia al morir.' },
-        { id: '9', name: 'Borramemorias', inventorId: 'char-01', tipo: 'Modificación Mental', nivelDanger: 9, description: 'Extrae y almacena recuerdos traumáticos o molestos del cerebro.' },
-        { id: '10', name: 'Miniverso', inventorId: 'char-22', tipo: 'Energía', nivelDanger: 10, description: 'Batería anidada dentro del microverso original de Rick.' },
-        { id: '11', name: 'Botas de Gravedad', inventorId: 'char-01', tipo: 'Movilidad', nivelDanger: 4, description: 'Permiten caminar por paredes y techos desafiando la gravedad.' },
-        { id: '12', name: 'Suero Mantis', inventorId: 'char-01', tipo: 'Arma Biológica', nivelDanger: 10, description: 'Muta a la gente en monstruos obsesionados con procrear.' },
-        { id: '13', name: 'Collar Traductor', inventorId: 'char-01', tipo: 'Comunicación', nivelDanger: 2, description: 'Traduce instantáneamente cualquier idioma alienígena.' },
-        { id: '14', name: 'Cúpula de Camuflaje Mental', inventorId: 'char-11', tipo: 'Camuflaje', nivelDanger: 7, description: 'Oculta la genialidad usando las ondas cerebrales de Mortys torturados.' },
-        { id: '15', name: 'Suero de Regeneración', inventorId: 'char-01', tipo: 'Médico', nivelDanger: 5, description: 'Cura heridas mortales casi instantáneamente.' }
+        { id: '1', name: 'Pistola de Portales', inventorId: 'char-01', type: 'Transporte', nivelDanger: 9, description: 'Permite viajar instantáneamente entre cualquier dimensión.' },
+        { id: '2', name: 'Nave Espacial', inventorId: 'char-01', type: 'Vehículo', nivelDanger: 8, description: 'Nave construida con basura que viaja más rápido que la luz.' },
+        { id: '3', name: 'Batería de Microverso', inventorId: 'char-01', type: 'Energía', nivelDanger: 10, description: 'Contiene un universo entero esclavizado para generar electricidad.' },
+        { id: '4', name: 'Casco de Inteligencia Canina', inventorId: 'char-01', type: 'Mejora Cognitiva', nivelDanger: 7, description: 'Otorga superinteligencia y capacidad de habla a los perros.' },
+        { id: '5', name: 'Caja de Meeseeks', inventorId: 'char-01', type: 'Utilidad', nivelDanger: 6, description: 'Invoca a un ser diseñado para cumplir una única tarea.' },
+        { id: '6', name: 'Gafas de Realidad Alternativa', inventorId: 'char-01', type: 'Entretenimiento', nivelDanger: 3, description: 'Muestra la vida del usuario en dimensiones paralelas.' },
+        { id: '7', name: 'Traje de Purga', inventorId: 'char-01', type: 'Armamento', nivelDanger: 10, description: 'Armadura de combate indestructible con un arsenal letal.' },
+        { id: '8', name: 'Tanques de Clonación', inventorId: 'char-01', type: 'Biotecnología', nivelDanger: 8, description: 'Clona el cuerpo y transfiere la consciencia al morir.' },
+        { id: '9', name: 'Borramemorias', inventorId: 'char-01', type: 'Modificación Mental', nivelDanger: 9, description: 'Extrae y almacena recuerdos traumáticos o molestos del cerebro.' },
+        { id: '10', name: 'Miniverso', inventorId: 'char-22', type: 'Energía', nivelDanger: 10, description: 'Batería anidada dentro del microverso original de Rick.' },
+        { id: '11', name: 'Botas de Gravedad', inventorId: 'char-01', type: 'Movilidad', nivelDanger: 4, description: 'Permiten caminar por paredes y techos desafiando la gravedad.' },
+        { id: '12', name: 'Suero Mantis', inventorId: 'char-01', type: 'Arma Biológica', nivelDanger: 10, description: 'Muta a la gente en monstruos obsesionados con procrear.' },
+        { id: '13', name: 'Collar Traductor', inventorId: 'char-01', type: 'Comunicación', nivelDanger: 2, description: 'Traduce instantáneamente cualquier idioma alienígena.' },
+        { id: '14', name: 'Cúpula de Camuflaje Mental', inventorId: 'char-11', type: 'Camuflaje', nivelDanger: 7, description: 'Oculta la genialidad usando las ondas cerebrales de Mortys torturados.' },
+        { id: '15', name: 'Suero de Regeneración', inventorId: 'char-01', type: 'Médico', nivelDanger: 5, description: 'Cura heridas mortales casi instantáneamente.' }
     );
     await db.write();
 }
