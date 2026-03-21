@@ -48,7 +48,7 @@ export async function menuPersonajes(gestor: GestorMultiverso): Promise<void> {
         await pausar();
         break;
       case 'alternates':
-        console.log('\n[TODO: Buscar versiones alternativas]');
+        await flujoLocalizarVersionesAlternativas(gestor);
         await pausar();
         break;
       case 'back':
@@ -358,5 +358,40 @@ export async function flujoConsultarPersonajes(gestor: GestorMultiverso): Promis
     console.log('No se encontraron personajes con esos criterios.');
   } else {
     console.table(resultados, ['id', 'name', 'speciesId', 'dimensionId', 'state', 'nivelIntelligence', 'affiliation']);
+  }
+}
+
+async function flujoLocalizarVersionesAlternativas(gestor: GestorMultiverso): Promise<void> {
+  console.log('\n--- LOCALIZAR VERSIONES ALTERNATIVAS ---');
+
+  const personajes = gestor.personajes.obtenerPersonajes();
+  if (personajes.length === 0) {
+    console.log('\nNo hay personajes registrados en el multiverso.');
+    return;
+  }
+
+  const respuesta = await prompts({
+    type: 'select',
+    name: 'id',
+    message: 'Selecciona el personaje para localizar sus versiones alternativas:',
+    choices: personajes.map(p => ({ title: `${p.name} (ID: ${p.id})`, value: p.id }))
+  });
+
+  if (!respuesta.id) {
+    console.log('\n-Operación cancelada.-');
+    return;
+  }
+
+
+  try {    
+    const versionesAlternativas = gestor.personajes.localizarVersionesAlternativas(respuesta.id);
+    if (versionesAlternativas.length === 0) {
+      console.log('\nNo se encontraron versiones alternativas para este personaje.');
+    } else {
+      console.log(`\nSe encontraron ${versionesAlternativas.length} versiones alternativas:`);
+      console.table(versionesAlternativas, ['id', 'name', 'speciesId', 'dimensionId', 'state', 'nivelIntelligence', 'affiliation']);
+    }
+  } catch (error: any) {
+    console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
