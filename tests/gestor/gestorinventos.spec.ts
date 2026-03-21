@@ -73,4 +73,15 @@ describe('GestorInventos - Pruebas Unitarias', () => {
     await gestor.agregarInvento(invento1);
     await gestor.agregarInvento(invento2);
   });
+
+  it ('deberia modificar un invento existente', async () => {
+    const invento: Invention = { id: 'I-6', name: 'Invisibility Cloak', inventorId: '1', type: 'Gadget', nivelDanger: 2, description: '...' };
+    await gestor.agregarInvento(invento);
+
+    await gestor.modificarInvento('I-6', { name: 'Invisibility Cloak v2', nivelDanger: 3 });
+    const inventos = gestor.obtenerInventos();
+    expect(inventos).toHaveLength(1);
+    expect(inventos[0].name).toBe('Invisibility Cloak v2');
+    expect(inventos[0].nivelDanger).toBe(3);
+  });
 });
