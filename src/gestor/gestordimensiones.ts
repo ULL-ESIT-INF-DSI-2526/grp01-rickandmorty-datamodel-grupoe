@@ -51,4 +51,20 @@ export class GestorDimensiones {
     return this.db.data.dimensiones;  
   }
 
+  /**
+   * Función para modificar una dimensión existente por ID.
+   */
+  public async modificarDimension(id: string, datosActualizados: Partial<Dimension>): Promise<void> {
+    const index = this.db.data.dimensiones.findIndex(d => d.id === id);
+    if (index === -1) {
+      throw new Error(`No existe una dimensión con el ID ${id}`);
+    }
+    if (datosActualizados.nivelTecnolog && (datosActualizados.nivelTecnolog < 1 || datosActualizados.nivelTecnolog > 10)) {
+      throw new Error(`El nivel tecnológico debe estar entre 1 y 10. Valor recibido: ${datosActualizados.nivelTecnolog}`);
+    }
+    await this.db.update(({ dimensiones }) => {
+      dimensiones[index] = { ...dimensiones[index], ...datosActualizados };
+    });
+  }
+
 }

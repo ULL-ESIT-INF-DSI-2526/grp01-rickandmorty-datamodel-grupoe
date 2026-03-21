@@ -36,7 +36,7 @@ export async function menuDimensiones(gestor: GestorMultiverso): Promise<void> {
         await pausar();
         break;
       case 'update':
-        console.log('\n[TODO: Modificar dimensión]');
+        await flujoModificarDimension(gestor);
         await pausar();
         break;
       case 'back':
@@ -135,5 +135,103 @@ async function flujoEliminarDimension(gestor: GestorMultiverso): Promise<void> {
     console.log('\nDimension eliminada exitosamente!');
   } catch (error: any) {
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
+  }
+}
+
+/** 
+ * Flujo interactivo para seleccionar y modificar los campos de una dimensión uno a uno.
+ */
+async function flujoModificarDimension(gestor: GestorMultiverso): Promise<void> {
+  console.log('\n--- MODIFICAR DIMENSION ---');
+  const dimensiones = gestor.dimensiones.obtenerDimensiones();
+  if (dimensiones.length === 0) {
+    console.log('\nNo hay dimensiones registradas en el multiverso.');
+    return;
+  }
+
+  const respuesta = await prompts({
+    type: 'select',
+    name: 'id',
+    message: 'Selecciona la dimensión que deseas modificar:',
+    choices: dimensiones.map(p => ({ title: `${p.name} (ID: ${p.id})`, value: p.id }))
+  });
+
+  if (!respuesta.id) return;
+
+  // Creación de una copia temporal de la especie para no modificar el original
+  const dimensionOriginal = dimensiones.find(p => p.id === respuesta.id);
+  let copiaDimension: Partial<Dimension> = { ...dimensionOriginal };
+  let editando: boolean = true;
+
+  while (editando) {
+    console.clear();
+    console.log('--- EDITANDO DIMENSIÓN ---');
+    console.log('Datos actuales que se van a guardar:');
+    console.table(copiaDimension);
+    console.log('--------------------------\n');
+
+    const menuEdicion = await prompts({
+      type: 'select',
+      name: 'campo',
+      message: '¿Qué campo deseas modificar?',
+      choices: [
+        { title: 'Nombre', value: 'name' },
+        { title: 'Estado', value: 'state' },
+        { title: 'Nivel de tecnología', value: 'nivelTecnolog' },
+        { title: 'Descripción', value: 'description' },
+        { title: 'Guardar cambios y salir', value: 'save' },
+        { title: 'Cancelar sin guardar', value: 'cancel' }
+      ]
+    });
+    
+    if (!menuEdicion.campo || menuEdicion.campo === 'cancel') {
+      console.log('\nModificación descartada.');
+      editando = false;
+      continue;
+    }
+
+    if (menuEdicion.campo === 'save') {
+      try {
+        await gestor.dimensiones.modificarDimension(respuesta.id, copiaDimension);
+        console.log('\n¡Dimensión actualizada y guardada con éxito!');
+      } catch (error: any) {
+        console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
+      }
+      editando = false;
+      continue;
+    }
+
+    let tipoPrompt: 'text' | 'select' | 'number' = 'text';
+    let opcionesSelect: any = undefined;
+    let valorInicial: any = copiaDimension[menuEdicion.campo as keyof Dimension];
+
+    if (menuEdicion.campo === 'state') {
+      tipoPrompt = 'select';
+      opcionesSelect = [
+        { title: 'activa', value: 'activa' },
+        { title: 'destruida', value: 'destruida' },
+        { title: 'cuarentena', value: 'cuarentena' }
+      ];
+
+      const indiceEstado = opcionesSelect.findIndex((opcion: any) => opcion.value === valorInicial);
+      valorInicial = indiceEstado !== -1 ? indiceEstado : 0;
+    
+    } else if (menuEdicion.campo === 'nivelTecnolog') {
+      tipoPrompt = 'number';
+    }
+
+    const { nuevoValor } = await prompts({
+      type: tipoPrompt,
+      name: 'nuevoValor',
+      message: `Introduce el nuevo valor para ${menuEdicion.campo}:`,
+      initial: valorInicial,
+      choices: opcionesSelect,
+      min: menuEdicion.campo === 'nivelTecnolog' ? 0 : undefined,
+      max: menuEdicion.campo === 'nivelTecnolog' ? 10 : undefined
+    });
+
+    if (nuevoValor !== undefined) {
+      (copiaDimension as any)[menuEdicion.campo] = nuevoValor;
+    }
   }
 }
