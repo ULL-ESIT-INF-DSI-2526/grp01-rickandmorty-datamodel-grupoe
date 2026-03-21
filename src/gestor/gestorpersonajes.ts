@@ -122,7 +122,7 @@ export class GestorPersonajes {
   /**
    * Localizar todas las versiones alternativas de un personaje concreto a través de las distintas dimensiones registradas.
    * @param id - ID del personaje a localizar sus versiones alternativas
-   * @returns Un objeto con un array de las versiones alternativas encontradas y el número de versiones. 
+   * @returns Un objeto con un array de las versiones alternativas encontradas.
    */
   public localizarVersionesAlternativas(id: string): Character[] {
     const personajeBase = this.db.data.personajes.find(p => p.id === id);
@@ -130,10 +130,10 @@ export class GestorPersonajes {
       throw new Error(`No existe un personaje con el ID ${id}`);
     }
 
-    const nombreBase = personajeBase.name.toLowerCase().trim();
+    const nombreBase = personajeBase.name.toLowerCase().trim().split(' ')[0];
     
     const versiones = this.db.data.personajes.filter(p =>
-    p.id !== personajeBase.id && p.name.toLowerCase().trim() === nombreBase && 
+    p.id !== personajeBase.id && p.name.toLowerCase().includes(nombreBase) && 
     p.dimensionId !== personajeBase.dimensionId);
 
     return versiones;
