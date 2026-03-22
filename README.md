@@ -10,7 +10,7 @@
 
 
 ### Modo de uso 
-Para cargar la interfa ejecute: `npm run start`
+Para cargar la interfaz ejecute: `npm run start`
 
 
 
