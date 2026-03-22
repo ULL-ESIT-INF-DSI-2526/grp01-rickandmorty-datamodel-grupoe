@@ -25,6 +25,7 @@ export async function menuViajes(
         { title: "Añadir viaje", value: "add" },
         { title: "Eliminar viaje", value: "delete" },
         { title: "Consultar viajes", value: "consult" },
+        { title: "Informe de viajes por viajero", value: "informe" },
         { title: "Volver al menú principal", value: "back" },
       ],
     });
@@ -41,6 +42,10 @@ export async function menuViajes(
         break;
       case "consult":
         await flujoConsultarViajes(gestorViajes);
+        await pausar();
+        break;
+      case "informe":
+        await flujoInformeViajesPorViajero(gestorViajes);
         await pausar();
         break;
       case "back":
@@ -194,4 +199,36 @@ async function flujoConsultarViajes(gestor: GestorMultiverso): Promise<void> {
       Motivo: v.motive,
     })),
   );
+}
+
+async function flujoInformeViajesPorViajero(gestor: GestorMultiverso): Promise<void> {
+  console.log("\n--- INFORME DE VIAJES POR VIAJERO ---");
+  const viajeros = gestor.personajes.obtenerPersonajes();
+  if (viajeros.length === 0) {
+    console.log("\nNo hay viajeros registrados en el multiverso.");
+    return;
+  }
+
+  const respuesta = await prompts({
+    type: "select",
+    name: "travelerId",
+    message: "Selecciona el viajero para consultar su historial de viajes:",
+    choices: viajeros.map((v) => ({
+      title: `${v.name} (ID: ${v.id})`,
+      value: v.id,
+    })),
+  });
+
+  if (!respuesta.travelerId) {
+    console.log("\n-Operación cancelada.-");
+    return;
+  }
+
+  console.log(`\n--- HISTORIAL DE VIAJES DEL VIAJERO ${respuesta.travelerId} ---\n`);
+  const informe = gestor.viajes.obtenerHistorialViajesPorViajero(respuesta.travelerId);
+  if (informe.length === 0) {
+    console.log(`No se encontraron viajes para el viajero con ID ${respuesta.travelerId}.`);
+    return;
+  }
+  informe.forEach((linea) => console.log(linea));
 }

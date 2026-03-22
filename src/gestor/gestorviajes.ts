@@ -54,4 +54,27 @@ export class GestorViajes {
   public obtenerViajes(): Travel[] {
     return this.db.data.viajes;
   }
+
+  public obtenerHistorialViajesPorViajero(travelerId: string): string[] {
+    const viajero = this.db.data.viajes.filter((v) => v.traveler.id === travelerId);
+    if (viajero.length === 0) {
+      console.log(`No se encontraron viajes para el viajero con ID ${travelerId}.`);
+      return [];
+    }
+    let informe: string[] = [];
+    viajero.forEach((viaje) => {
+      informe.push(`Viaje ID: ${viaje.id} Origen: ${viaje.origin.name} (ID: ${viaje.origin.id}) Destino: ${viaje.destination.name} (ID: ${viaje.destination.id}) Fecha: ${viaje.date.toString().split("T")[0]} Motivo: ${viaje.motive}\n\n`);
+    });
+
+    const tabla = viajero.map((v) => ({
+      "Viaje ID": v.id,
+      "Origen": `${v.origin.name} (ID: ${v.origin.id})`,
+      "Destino": `${v.destination.name} (ID: ${v.destination.id})`,
+      "Fecha": v.date.toString().split("T")[0],
+      "Motivo": v.motive,
+    }));
+    console.table(tabla);
+    
+    return informe;
+  }
 }
