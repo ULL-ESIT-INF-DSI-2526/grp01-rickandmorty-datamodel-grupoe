@@ -190,7 +190,7 @@ async function flujoConsultarViajes(gestor: GestorMultiverso): Promise<void> {
       Viajero: v.traveler.name,
       Origen: v.origin.name,
       Destino: v.destination.name,
-      Fecha: v.date.toLocaleDateString(),
+      Fecha: v.date.toString().split("T")[0],
       Motivo: v.motive,
     })),
   );

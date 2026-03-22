@@ -7,7 +7,6 @@ export class GestorViajes {
 
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
-    this.db.data.viajes = [];
   }
 
   public async agregarViaje(viaje: Travel): Promise<void> {
