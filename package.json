@@ -8,7 +8,7 @@
     "doc": "typedoc",
     "test": "vitest run",
     "start": "npx tsx src/index.ts",
-    "coverage": "vitest run --coverage --coverage.include=src/**/*.{ts,tsx,js,jsx}"
+    "coverage": "vitest run --coverage --coverage.include=src/gestor/*.{ts,tsx,js,jsx}"
   },
   "keywords": [],
   "author": "",

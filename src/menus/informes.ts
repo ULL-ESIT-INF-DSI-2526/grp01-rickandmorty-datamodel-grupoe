@@ -35,7 +35,7 @@ export async function menuInformes(gestor: GestorMultiverso): Promise<void> {
         await pausar();
         break;
       case "pers":
-        // await flujoPersonajesAlternativas(gestor);
+        await flujoPersonajesAlternativas(gestor);
         await pausar();
         break;
       case "inv":
@@ -71,6 +71,28 @@ async function flujoDimensionesActivas(gestor: GestorMultiverso): Promise<void> 
       "Nombre": d.name, 
       "Nivel Tecnológico": d.nivelTecnolog,
       "Estado": d.state
+    }))
+  );
+}
+
+/**
+ * Funcion para mostrar un informe de los personajes con más versiones alternativas en el multiverso
+ * @param gestor - Instancia del gestor para acceder a los datos y generar el informe
+ * @returns Retornamos una tabla con el informe realizado.
+ */
+async function flujoPersonajesAlternativas(gestor: GestorMultiverso): Promise<void> {
+  console.log("\n--- TOP PERSONAJES CON MÁS VERSIONES ALTERNATIVAS ---");
+  const informe = gestor.informes.informeVersionesAlternativas();
+
+  if (informe.length === 0) {
+    console.log("\nNo se encontraron personajes con versiones alternativas registradas.");
+    return;
+  }
+
+  console.table(
+    informe.map((v) => ({
+      "Personaje Base": v.nombreBase.charAt(0).toUpperCase() + v.nombreBase.slice(1),
+      "Total de Versiones en el Multiverso": v.cantidad,
     }))
   );
 }
