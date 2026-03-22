@@ -22,7 +22,7 @@ export interface Data {
   ubicaciones: Location[];
   viajes: Travel[];
   alteracionesDimensionales: AlteracionDimension[];
-  eventos: Eventos[];
+  eventos: Evento[];
 }
 
 /**

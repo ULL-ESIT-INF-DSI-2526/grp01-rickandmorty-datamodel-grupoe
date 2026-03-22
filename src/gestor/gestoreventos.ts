@@ -35,9 +35,9 @@ export class GestorEventos {
     };
 
     // Guardamos en la base de datos 
-    await this.db.update(({ eventos }) => {
-      if (!eventos) eventos = []; 
-      eventos.push(nuevoEvento);
+    await this.db.update((data) => {
+      if (!data.eventos) data.eventos = []; 
+      data.eventos.push(nuevoEvento);
     });
   }
 
@@ -54,11 +54,11 @@ export class GestorEventos {
    * @param eventoId - ID del evento a eliminar.
    */
   public async eliminarEvento(eventoId: string): Promise<void> {
-    await this.db.update(({ eventos }) => {
-      if (!eventos) return; 
-      const index = eventos.findIndex(e => e.id === eventoId);
+    await this.db.update((data) => {
+      if (!data.eventos) return; 
+      const index = data.eventos.findIndex(e => e.id === eventoId);
       if (index !== -1) {
-        eventos.splice(index, 1); 
+        data.eventos.splice(index, 1); 
       }
     });
   }

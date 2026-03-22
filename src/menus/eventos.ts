@@ -29,8 +29,9 @@ export async function menuEventos(
       name: "accion",
       message: "--- GESTIÓN DE EVENTOS ---\n¿Qué operación deseas realizar?",
       choices: [
-        { title: "Añadir evento", value: "add" },
-        { title: "Eliminar evento", value: "delete" },
+        { title: "Desplegar artefacto", value: "add" },
+        { title: "Neutralizar artefacto", value: "delete" },
+        { title: "Consultar eventos registrados", value: "consult" },
         { title: "Volver al menú principal", value: "back" },
       ],
     });
