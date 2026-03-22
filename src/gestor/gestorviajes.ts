@@ -42,6 +42,16 @@ export class GestorViajes {
     });
   }
 
+  public async eliminarViaje(id: string): Promise<void> {
+    const index = this.db.data.viajes.findIndex((v) => v.id === id);
+    if (index === -1) {
+      throw new Error(`No existe un viaje con el ID ${id}`);
+    }
+    await this.db.update(({ viajes }) => {
+      viajes.splice(index, 1);
+    });
+  }
+
   public obtenerViajes(): Travel[] {
     return this.db.data.viajes;
   }

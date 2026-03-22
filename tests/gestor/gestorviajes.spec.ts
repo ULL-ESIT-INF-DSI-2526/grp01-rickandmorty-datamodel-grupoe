@@ -246,4 +246,5 @@ describe("GestorViajes - Pruebas Unitarias", () => {
 
     await gestor.eliminarViaje("V-5");
     expect(gestor.obtenerViajes()).toHaveLength(0);
+  });
 });
