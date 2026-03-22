@@ -27,6 +27,6 @@ export interface FiltroPersonajes {
 }
 
 export interface OrdenPersonajes {
-  campo: 'name' | 'nivelIntelligence';
-  direccion: 'asc' | 'desc';
+  campo: "name" | "nivelIntelligence";
+  direccion: "asc" | "desc";
 }

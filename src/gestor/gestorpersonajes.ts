@@ -1,7 +1,11 @@
-import { Character, FiltroPersonajes, OrdenPersonajes } from '../interfaces/character.js';
-import { Low } from 'lowdb';
+import {
+  Character,
+  FiltroPersonajes,
+  OrdenPersonajes,
+} from "../interfaces/character.js";
+import { Low } from "lowdb";
 
-import { Data } from '../database/db.js';
+import { Data } from "../database/db.js";
 
 export class GestorPersonajes {
   private db: Low<Data>; // Referencia a la base de datos
@@ -19,16 +23,20 @@ export class GestorPersonajes {
    */
   public async agregarPersonaje(personaje: Character): Promise<void> {
     // Validación de existencia de la dimensión de origen del personaje
-    const dimensionOrigen = this.db.data.dimensiones.find(d => d.id === personaje.dimensionId);
+    const dimensionOrigen = this.db.data.dimensiones.find(
+      (d) => d.id === personaje.dimensionId,
+    );
     if (!dimensionOrigen) {
-      throw new Error(`La dimensión de origen ${personaje.dimensionId} no existe en el multiverso.`);
+      throw new Error(
+        `La dimensión de origen ${personaje.dimensionId} no existe en el multiverso.`,
+      );
     }
     // Validación de inteligencia (escala del 1 al 10)
     if (personaje.nivelIntelligence < 1 || personaje.nivelIntelligence > 10) {
-      throw new Error('El nivel de inteligencia debe estar entre 1 y 10.');
+      throw new Error("El nivel de inteligencia debe estar entre 1 y 10.");
     }
-    
-    await this.db.update(( { personajes }) => {
+
+    await this.db.update(({ personajes }) => {
       personajes.push(personaje);
     });
   }
@@ -38,11 +46,11 @@ export class GestorPersonajes {
    * @param id - ID del personaje a eliminar
    */
   public async eliminarPersonaje(id: string): Promise<void> {
-    const index = this.db.data.personajes.findIndex(p => p.id === id);
+    const index = this.db.data.personajes.findIndex((p) => p.id === id);
     if (index === -1) {
       throw new Error(`No existe un personaje con el ID ${id}`);
     }
-    await this.db.update(( { personajes }) => {
+    await this.db.update(({ personajes }) => {
       personajes.splice(index, 1);
     });
   }
@@ -57,49 +65,69 @@ export class GestorPersonajes {
   /**
    * Modifica un personaje existente sustituyendo sus datos por los nuevos.
    */
-  public async modificarPersonaje(id: string, nuevosDatos: Partial<Character>): Promise<void> {
-    const index = this.db.data.personajes.findIndex(p => p.id === id);
+  public async modificarPersonaje(
+    id: string,
+    nuevosDatos: Partial<Character>,
+  ): Promise<void> {
+    const index = this.db.data.personajes.findIndex((p) => p.id === id);
     if (index === -1) {
       throw new Error(`No existe un personaje con el ID ${id}`);
     }
 
     if (nuevosDatos.dimensionId) {
-      const dimensionExiste = this.db.data.dimensiones.find(d => d.id === nuevosDatos.dimensionId);
+      const dimensionExiste = this.db.data.dimensiones.find(
+        (d) => d.id === nuevosDatos.dimensionId,
+      );
       if (!dimensionExiste) {
-        throw new Error(`La dimensión de origen ${nuevosDatos.dimensionId} no existe en el multiverso.`);
+        throw new Error(
+          `La dimensión de origen ${nuevosDatos.dimensionId} no existe en el multiverso.`,
+        );
       }
     }
 
     if (nuevosDatos.nivelIntelligence) {
-      if (nuevosDatos.nivelIntelligence < 1 || nuevosDatos.nivelIntelligence > 10) {
-        throw new Error('El nivel de inteligencia debe estar entre 1 y 10.');
+      if (
+        nuevosDatos.nivelIntelligence < 1 ||
+        nuevosDatos.nivelIntelligence > 10
+      ) {
+        throw new Error("El nivel de inteligencia debe estar entre 1 y 10.");
       }
     }
-    
+
     // Actualizamos en base de datos
     await this.db.update(({ personajes }) => {
       personajes[index] = { ...personajes[index], ...nuevosDatos };
     });
   }
 
-  public consultarPersonajes(filtro?: FiltroPersonajes, orden?: OrdenPersonajes): Character[] {
+  public consultarPersonajes(
+    filtro?: FiltroPersonajes,
+    orden?: OrdenPersonajes,
+  ): Character[] {
     // Hacemos una copia del array para no mutar el original de la base de datos al ordenar
     let resultado = [...this.db.data.personajes];
 
     // Aplicar filtros si existen
     if (filtro) {
-      resultado = resultado.filter(p => {
+      resultado = resultado.filter((p) => {
         let coincide = true;
-        
+
         // El nombre debe ser una búsqueda parcial
-        if (filtro.name && !p.name.toLowerCase().includes(filtro.name.toLowerCase())) coincide = false;
-        
+        if (
+          filtro.name &&
+          !p.name.toLowerCase().includes(filtro.name.toLowerCase())
+        )
+          coincide = false;
+
         // El resto de filtros son coincidencias exactas
-        if (filtro.speciesId && p.speciesId !== filtro.speciesId) coincide = false;
-        if (filtro.dimensionId && p.dimensionId !== filtro.dimensionId) coincide = false;
+        if (filtro.speciesId && p.speciesId !== filtro.speciesId)
+          coincide = false;
+        if (filtro.dimensionId && p.dimensionId !== filtro.dimensionId)
+          coincide = false;
         if (filtro.state && p.state !== filtro.state) coincide = false;
-        if (filtro.affiliation && p.affiliation !== filtro.affiliation) coincide = false;
-        
+        if (filtro.affiliation && p.affiliation !== filtro.affiliation)
+          coincide = false;
+
         return coincide;
       });
     }
@@ -110,8 +138,8 @@ export class GestorPersonajes {
         const valorA = a[orden.campo];
         const valorB = b[orden.campo];
 
-        if (valorA < valorB) return orden.direccion === 'asc' ? -1 : 1;
-        if (valorA > valorB) return orden.direccion === 'asc' ? 1 : -1;
+        if (valorA < valorB) return orden.direccion === "asc" ? -1 : 1;
+        if (valorA > valorB) return orden.direccion === "asc" ? 1 : -1;
         return 0;
       });
     }
@@ -125,16 +153,19 @@ export class GestorPersonajes {
    * @returns Un objeto con un array de las versiones alternativas encontradas.
    */
   public localizarVersionesAlternativas(id: string): Character[] {
-    const personajeBase = this.db.data.personajes.find(p => p.id === id);
+    const personajeBase = this.db.data.personajes.find((p) => p.id === id);
     if (!personajeBase) {
       throw new Error(`No existe un personaje con el ID ${id}`);
     }
 
-    const nombreBase = personajeBase.name.toLowerCase().trim().split(' ')[0];
-    
-    const versiones = this.db.data.personajes.filter(p =>
-    p.id !== personajeBase.id && p.name.toLowerCase().includes(nombreBase) && 
-    p.dimensionId !== personajeBase.dimensionId);
+    const nombreBase = personajeBase.name.toLowerCase().trim().split(" ")[0];
+
+    const versiones = this.db.data.personajes.filter(
+      (p) =>
+        p.id !== personajeBase.id &&
+        p.name.toLowerCase().includes(nombreBase) &&
+        p.dimensionId !== personajeBase.dimensionId,
+    );
 
     return versiones;
   }

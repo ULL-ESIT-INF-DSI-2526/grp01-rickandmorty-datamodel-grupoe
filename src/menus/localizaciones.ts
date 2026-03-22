@@ -1,51 +1,57 @@
-import prompts from 'prompts';
-import { Location, FiltroLocalizaciones } from '../interfaces/location.js';
-import { GestorMultiverso } from '../gestor/gestor.js';
-
+import prompts from "prompts";
+import { Location, FiltroLocalizaciones } from "../interfaces/location.js";
+import { GestorMultiverso } from "../gestor/gestor.js";
 
 async function pausar(): Promise<void> {
-  await prompts({ type: 'invisible', name: 'p', message: 'Presiona Enter para continuar...' });
+  await prompts({
+    type: "invisible",
+    name: "p",
+    message: "Presiona Enter para continuar...",
+  });
 }
 
-export async function menuLocalizaciones(gestor: GestorMultiverso): Promise<void> {
+export async function menuLocalizaciones(
+  gestor: GestorMultiverso,
+): Promise<void> {
   let volver: boolean = false;
 
   while (!volver) {
-  console.clear();
-    
-    const respuesta = await prompts<'accion'>({
-      type: 'select',
-      name: 'accion',
-      message: '--- GESTIÓN DE LOCALIZACIONES ---\n¿Qué operación deseas realizar?',
+    console.clear();
+
+    const respuesta = await prompts<"accion">({
+      type: "select",
+      name: "accion",
+      message:
+        "--- GESTIÓN DE LOCALIZACIONES ---\n¿Qué operación deseas realizar?",
       choices: [
-        { title: 'Añadir localización', value: 'add' },
-        { title: 'Eliminar localización', value: 'delete' },
-        { title: 'Modificar localización', value: 'update' },
-        { title: 'Consultar localizaciones', value: 'consult' },
-        { title: 'Volver al menú principal', value: 'back' }
-      ]
+        { title: "Añadir localización", value: "add" },
+        { title: "Eliminar localización", value: "delete" },
+        { title: "Modificar localización", value: "update" },
+        { title: "Consultar localizaciones", value: "consult" },
+        { title: "Volver al menú principal", value: "back" },
+      ],
     });
 
     if (!respuesta.accion) return;
 
     switch (respuesta.accion) {
-      case 'add':
+      case "add":
         await flujoAñadirLocalizacion(gestor);
         await pausar();
         break;
-      case 'delete':
+      case "delete":
         await flujoEliminarLocalizacion(gestor);
         await pausar();
         break;
-      case 'update':
+      case "update":
         await flujoModificarLocalizacion(gestor);
         await pausar();
         break;
-      case 'consult':
+      case "consult":
         await flujoConsultarLocalizaciones(gestor);
         await pausar();
         break;
-      case 'back':
+      case "back":
         volver = true;
         break;
     }
@@ -55,48 +61,50 @@ export async function menuLocalizaciones(gestor: GestorMultiverso): Promise<void
 /**
  * Flujo interactivo para pedir los datos y crear un nueva localización.
  */
-async function flujoAñadirLocalizacion(gestor: GestorMultiverso): Promise<void> {
-  console.log('\n--- REGISTRO DE LA NUEVA LOCALIZACIÓN ---');
+async function flujoAñadirLocalizacion(
+  gestor: GestorMultiverso,
+): Promise<void> {
+  console.log("\n--- REGISTRO DE LA NUEVA LOCALIZACIÓN ---");
   // Asegurarse que los name sean igual que lo de las interfaces para que no de fallos al pasarlo al tipo de datos del Location
   const datos = await prompts([
     {
-      type: 'text',
-      name: 'id',
-      message: 'ID de la localización (Ej: loc-1):',
-      validate: (v) => v.length > 0 ? true : 'El ID es obligatorio.'
+      type: "text",
+      name: "id",
+      message: "ID de la localización (Ej: loc-1):",
+      validate: (v) => (v.length > 0 ? true : "El ID es obligatorio."),
     },
     {
-      type: 'text',
-      name: 'name', 
-      message: 'Nombre de la localización:'
+      type: "text",
+      name: "name",
+      message: "Nombre de la localización:",
     },
     {
-      type: 'text',
-      name: 'type',
-      message: 'Tipo de localización:'
+      type: "text",
+      name: "type",
+      message: "Tipo de localización:",
     },
     {
-      type: 'text',
-      name: 'dimensionId',
-      message: 'Referencia con la ID de la dimension en la que se encuentra:',
+      type: "text",
+      name: "dimensionId",
+      message: "Referencia con la ID de la dimension en la que se encuentra:",
     },
     {
-      type: 'number',
-      name: 'population',
-      message: 'Poblacion de la localizacion:',
+      type: "number",
+      name: "population",
+      message: "Poblacion de la localizacion:",
       min: 0,
-      max: 1000000000
+      max: 1000000000,
     },
     {
-      type: 'text',
-      name: 'description',
-      message: 'Breve descripción:'
-    }
+      type: "text",
+      name: "description",
+      message: "Breve descripción:",
+    },
   ]);
 
   // Si el usuario cancela a mitad de las preguntas
   if (!datos.id) {
-    console.log('\n-Operación cancelada.-');
+    console.log("\n-Operación cancelada.-");
     return;
   }
 
@@ -106,9 +114,11 @@ async function flujoAñadirLocalizacion(gestor: GestorMultiverso): Promise<void>
     // Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si el personaje es válido
     await gestor.localizaciones.agregarLocalizacion(nuevaLocalizacion);
     // Si todo va bien
-    console.log(`\n ¡Éxito! La localización ${nuevaLocalizacion.name} ha sido añadida al multiverso.`);
+    console.log(
+      `\n ¡Éxito! La localización ${nuevaLocalizacion.name} ha sido añadida al multiverso.`,
+    );
   } catch (error: any) {
-    // Si se intorudce un dato incorrecto, el error se mostrará aquí 
+    // Si se intorudce un dato incorrecto, el error se mostrará aquí
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
@@ -116,91 +126,103 @@ async function flujoAñadirLocalizacion(gestor: GestorMultiverso): Promise<void>
 /**
  * Funcion para eliminar una localización de la db
  */
-async function flujoEliminarLocalizacion(gestor: GestorMultiverso): Promise<void> {
-  console.log('\n--- ELIMINAR LOCALIZACIÓN ---');
+async function flujoEliminarLocalizacion(
+  gestor: GestorMultiverso,
+): Promise<void> {
+  console.log("\n--- ELIMINAR LOCALIZACIÓN ---");
   const localizaciones = gestor.localizaciones.obtenerLocalizaciones();
   if (localizaciones.length === 0) {
-    console.log('\nNo hay localizaciones registradas en el multiverso.');
+    console.log("\nNo hay localizaciones registradas en el multiverso.");
     return;
   }
 
   const respuesta = await prompts({
-    type: 'select',
-    name: 'id',
-    message: 'Selecciona la localización que deseas eliminar:',
-    choices: localizaciones.map(l => ({ title: `${l.name} (ID: ${l.id})`, value: l.id }))
+    type: "select",
+    name: "id",
+    message: "Selecciona la localización que deseas eliminar:",
+    choices: localizaciones.map((l) => ({
+      title: `${l.name} (ID: ${l.id})`,
+      value: l.id,
+    })),
   });
-  
+
   if (!respuesta.id) {
-    console.log('\n-Operación cancelada.-');
+    console.log("\n-Operación cancelada.-");
     return;
   }
 
   try {
     await gestor.localizaciones.eliminarLocalizacion(respuesta.id);
-    console.log('\n¡Localización eliminada exitosamente!');
+    console.log("\n¡Localización eliminada exitosamente!");
   } catch (error: any) {
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
 
-async function flujoModificarLocalizacion(gestor: GestorMultiverso): Promise<void> {
-  console.log('\n--- MODIFICAR LOCALIZACIÓN ---');
+async function flujoModificarLocalizacion(
+  gestor: GestorMultiverso,
+): Promise<void> {
+  console.log("\n--- MODIFICAR LOCALIZACIÓN ---");
   const localizaciones = gestor.localizaciones.obtenerLocalizaciones();
   if (localizaciones.length === 0) {
-    console.log('\nNo hay localizaciones registradas en el multiverso.');
+    console.log("\nNo hay localizaciones registradas en el multiverso.");
     return;
   }
-  
+
   const respuesta = await prompts({
-    type: 'select',
-    name: 'id',
-    message: 'Selecciona la localización que deseas modificar:',
-    choices: localizaciones.map(l => ({ title: `${l.name} (ID: ${l.id})`, value: l.id }))
+    type: "select",
+    name: "id",
+    message: "Selecciona la localización que deseas modificar:",
+    choices: localizaciones.map((l) => ({
+      title: `${l.name} (ID: ${l.id})`,
+      value: l.id,
+    })),
   });
 
   if (!respuesta.id) {
-    console.log('\n-Operación cancelada.-');
+    console.log("\n-Operación cancelada.-");
     return;
   }
 
   // Copia de la localización original para modificarla
-  const localizacionOriginal = localizaciones.find(l => l.id === respuesta.id);
+  const localizacionOriginal = localizaciones.find(
+    (l) => l.id === respuesta.id,
+  );
   let copia = { ...localizacionOriginal };
   let edit = true;
 
   while (edit) {
     console.clear();
-    console.log('--- MODIFICANDO LOCALIZACIÓN: ---');
-    console.log('Datos actuales que se van a guardar:');
+    console.log("--- MODIFICANDO LOCALIZACIÓN: ---");
+    console.log("Datos actuales que se van a guardar:");
     console.table(copia);
-    console.log('--------------------------\n');
+    console.log("--------------------------\n");
 
     const menuEdit = await prompts({
-      type: 'select',
-      name: 'campo',
-      message: '¿Qué campo deseas modificar?',
+      type: "select",
+      name: "campo",
+      message: "¿Qué campo deseas modificar?",
       choices: [
-        { title: 'Nombre', value: 'name' },
-        { title: 'Tipo', value: 'type' },
-        { title: 'ID de dimensión', value: 'dimensionId' },
-        { title: 'Población', value: 'population' },
-        { title: 'Descripción', value: 'description' },
-        { title: 'Guardar cambios y salir', value: 'save' },
-        { title: 'Cancelar modificación', value: 'cancelar' }
-      ]
+        { title: "Nombre", value: "name" },
+        { title: "Tipo", value: "type" },
+        { title: "ID de dimensión", value: "dimensionId" },
+        { title: "Población", value: "population" },
+        { title: "Descripción", value: "description" },
+        { title: "Guardar cambios y salir", value: "save" },
+        { title: "Cancelar modificación", value: "cancelar" },
+      ],
     });
 
-    if (!menuEdit.campo || menuEdit.campo === 'cancelar') {
-      console.log('\nModificación descartada.');
+    if (!menuEdit.campo || menuEdit.campo === "cancelar") {
+      console.log("\nModificación descartada.");
       edit = false;
       continue;
     }
 
-    if (menuEdit.campo === 'save') {
+    if (menuEdit.campo === "save") {
       try {
         await gestor.localizaciones.modificarLocalizacion(respuesta.id, copia);
-        console.log('\n¡Localización modificada exitosamente!');
+        console.log("\n¡Localización modificada exitosamente!");
       } catch (error: any) {
         console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
       }
@@ -208,70 +230,80 @@ async function flujoModificarLocalizacion(gestor: GestorMultiverso): Promise<voi
       continue;
     }
 
-    let tipoPrompt: 'text' | 'number' | 'select' = 'text';
+    let tipoPrompt: "text" | "number" | "select" = "text";
 
     // Usamos keyof para el "noImplicitAny"
     let valorInicial: any = copia[menuEdit.campo as keyof Location];
 
     // Población positiva o cero
-    if (menuEdit.campo === 'population') {
-      tipoPrompt = 'number';
-      valorInicial = (typeof valorInicial === 'number' && valorInicial >= 0) ? valorInicial : 0;
+    if (menuEdit.campo === "population") {
+      tipoPrompt = "number";
+      valorInicial =
+        typeof valorInicial === "number" && valorInicial >= 0
+          ? valorInicial
+          : 0;
     }
 
     let opcionesDimension: { title: string; value: string }[] = [];
 
-    if (menuEdit.campo === 'dimensionId') {
+    if (menuEdit.campo === "dimensionId") {
       const dimensiones = gestor.dimensiones.obtenerDimensiones();
-      opcionesDimension = dimensiones.map(d => ({ title: `${d.name} (ID: ${d.id})`, value: d.id }));
-      tipoPrompt = 'select';
+      opcionesDimension = dimensiones.map((d) => ({
+        title: `${d.name} (ID: ${d.id})`,
+        value: d.id,
+      }));
+      tipoPrompt = "select";
 
-      const indiceEstado = opcionesDimension.findIndex((opcion: any) => opcion.value === valorInicial);
+      const indiceEstado = opcionesDimension.findIndex(
+        (opcion: any) => opcion.value === valorInicial,
+      );
       valorInicial = indiceEstado !== -1 ? indiceEstado : 0;
-      }
+    }
 
     const respuestaCampo = await prompts({
       type: tipoPrompt,
-      name: 'valor',
+      name: "valor",
       message: `Nuevo valor para ${menuEdit.campo}:`,
       initial: valorInicial,
-      choices: opcionesDimension.length > 0 ? opcionesDimension : undefined
+      choices: opcionesDimension.length > 0 ? opcionesDimension : undefined,
     });
-  
+
     if (respuestaCampo.valor !== undefined) {
       (copia as any)[menuEdit.campo] = respuestaCampo.valor; // Actualizamos la copia con el nuevo valor
-    }  
     }
   }
+}
 
-export async function flujoConsultarLocalizaciones(gestor: GestorMultiverso): Promise<void> {
-  console.log('\n--- CONSULTAR LOCALIZACIONES ---');
+export async function flujoConsultarLocalizaciones(
+  gestor: GestorMultiverso,
+): Promise<void> {
+  console.log("\n--- CONSULTAR LOCALIZACIONES ---");
 
   const { campoFiltro } = await prompts({
-    type: 'select',
-    name: 'campoFiltro',
-    message: '¿Por qué atributo deseas filtrar?',
+    type: "select",
+    name: "campoFiltro",
+    message: "¿Por qué atributo deseas filtrar?",
     choices: [
-      { title: 'Sin filtro (Monstrar todo)', value: 'ninguno' },
-      { title: 'Nombre', value: 'name' },
-      { title: 'Tipo', value: 'type' },
-      { title: 'ID de dimensión', value: 'dimensionId' }
-    ]
+      { title: "Sin filtro (Monstrar todo)", value: "ninguno" },
+      { title: "Nombre", value: "name" },
+      { title: "Tipo", value: "type" },
+      { title: "ID de dimensión", value: "dimensionId" },
+    ],
   });
 
   if (!campoFiltro) return;
-  
+
   let filtro: FiltroLocalizaciones | undefined = undefined;
 
-  if (campoFiltro !== 'ninguno') {
-    let tipoInput: 'text' | 'number' | 'select' = 'text';
+  if (campoFiltro !== "ninguno") {
+    let tipoInput: "text" | "number" | "select" = "text";
     let opciones = undefined;
 
     const { valorFiltro } = await prompts({
       type: tipoInput,
-      name: 'valorFiltro',
+      name: "valorFiltro",
       message: `Valor para filtrar por ${campoFiltro}:`,
-      choices: opciones
+      choices: opciones,
     });
 
     if (!valorFiltro) return;
@@ -283,8 +315,16 @@ export async function flujoConsultarLocalizaciones(gestor: GestorMultiverso): Pr
 
   console.log(`\n--- RESULTADOS DE LA BÚSQUEDA ---`);
   if (resultado.length === 0) {
-    console.log('No se encontraron localizaciones que coincidan con el filtro aplicado.');
+    console.log(
+      "No se encontraron localizaciones que coincidan con el filtro aplicado.",
+    );
   } else {
-    console.table(resultado, ['id', 'name', 'type', 'dimensionId', 'population']);
+    console.table(resultado, [
+      "id",
+      "name",
+      "type",
+      "dimensionId",
+      "population",
+    ]);
   }
 }

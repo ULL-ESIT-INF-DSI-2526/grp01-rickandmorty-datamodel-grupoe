@@ -1,11 +1,11 @@
-import { GestorDimensiones } from './gestordimensiones.js';
-import { GestorPersonajes } from './gestorpersonajes.js';
-import { GestorEspecies } from './gestorespecies.js';
-import { GestorLocalizaciones } from './gestorlocalizaciones.js'
-import { GestorInventos } from './gestorinventos.js'
-import { Low } from 'lowdb';
+import { GestorDimensiones } from "./gestordimensiones.js";
+import { GestorPersonajes } from "./gestorpersonajes.js";
+import { GestorEspecies } from "./gestorespecies.js";
+import { GestorLocalizaciones } from "./gestorlocalizaciones.js";
+import { GestorInventos } from "./gestorinventos.js";
+import { Low } from "lowdb";
 
-import { Data } from '../database/db.js';
+import { Data } from "../database/db.js";
 
 /**
  * Clase con el gestor central del Multiverso.
@@ -30,5 +30,4 @@ export class GestorMultiverso {
     this.localizaciones = new GestorLocalizaciones(baseDatos);
     this.inventos = new GestorInventos(baseDatos);
   }
-
 }
