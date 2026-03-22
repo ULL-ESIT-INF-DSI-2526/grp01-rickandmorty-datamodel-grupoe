@@ -39,7 +39,7 @@ export async function menuInformes(gestor: GestorMultiverso): Promise<void> {
         await pausar();
         break;
       case "inv":
-        // await flujoInventosPeligrosos(gestor);
+        await flujoInventosPeligrosos(gestor);
         await pausar();
         break;
       case "back":
@@ -97,5 +97,26 @@ async function flujoPersonajesAlternativas(gestor: GestorMultiverso): Promise<vo
   );
 }
 
+/** * Funcion para mostrar un informe de los inventos más peligrosos y su localización actual
+ * @param gestor - Instancia del gestor para acceder a los datos y generar el informe
+ * @returns Retornamos una tabla con el informe realizado.
+ */
+async function flujoInventosPeligrosos(gestor: GestorMultiverso): Promise<void> {
+  console.log("\n--- TOP INVENTOS MÁS PELIGROSOS Y SU LOCALIZACIÓN ACTUAL ---");
+  const informe = gestor.informes.informeInventosPeligrosos();
 
+  if (informe.length === 0) {
+    console.log("\nNo se encontraron inventos registrados en el multiverso.");
+    return;
+  }
+
+  console.table(
+    informe.map((v) => ({
+      "ID del Invento": v.invento.id,
+      "Nombre del Invento": v.invento.name,
+      "Nivel de Peligro": v.invento.nivelDanger,
+      "Localización Actual": v.nombreLocalizacion,
+    }))
+  );  
+}
 

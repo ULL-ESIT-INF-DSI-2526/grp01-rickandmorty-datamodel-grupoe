@@ -7,6 +7,7 @@ import { menuInventos } from "./menus/inventos.js";
 import { menuViajes } from "./menus/viajes.js";
 import { menuAlteraciones } from "./menus/alteraciones.js";
 import { menuInformes } from "./menus/informes.js";
+import { menuEventos } from "./menus/eventos.js";
 
 import { db } from "./database/db.js";
 import { GestorMultiverso } from "./gestor/gestor.js";
@@ -49,6 +50,7 @@ export async function menuPrincipal(): Promise<void> {
         { title: "Viajes", value: "viajes" },
         { title: "Alteraciones Dimensionales", value: "alteraciones" },
         { title: "Informes", value: "informes" },
+        { title: "Eventos", value: "eventos" },
         { title: "Salir del sistema", value: "salir" },
       ],
     });
@@ -94,6 +96,10 @@ export async function menuPrincipal(): Promise<void> {
       case "salir":
         salir = true;
         console.log("\nApagando el sistema. ¡Hasta pronto!");
+        break;
+      case "eventos":
+        await menuEventos(gestor);
+        await pausar();
         break;
     }
   }

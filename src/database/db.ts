@@ -9,6 +9,7 @@ import { Species } from "../interfaces/species.js";
 import { Location } from "../interfaces/location.js";
 import { Travel } from "../interfaces/travels.js";
 import { AlteracionDimension } from "../interfaces/dimensionalteration.js";
+import { Evento } from "../interfaces/event.js";
 
 /**
  * Interfaz que define la estructura de la base de datos.
@@ -21,6 +22,7 @@ export interface Data {
   ubicaciones: Location[];
   viajes: Travel[];
   alteracionesDimensionales: AlteracionDimension[];
+  eventos: Eventos[];
 }
 
 /**
@@ -34,6 +36,7 @@ const defaultData: Data = {
   ubicaciones: [],
   viajes: [],
   alteracionesDimensionales: [],
+  eventos: [],
 };
 
 /**

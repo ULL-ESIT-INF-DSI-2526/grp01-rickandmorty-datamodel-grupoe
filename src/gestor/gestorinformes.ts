@@ -2,6 +2,7 @@
 import { Low } from "lowdb";
 import { Data } from "../database/db.js";
 import { Dimension } from "../interfaces/dimension.js";
+import { Invention } from "../interfaces/invention.js";
 
 export class GestorInformes {
   private db: Low<Data>;
@@ -54,4 +55,35 @@ export class GestorInformes {
       .sort((a, b) => b.cantidad - a.cantidad);
     return ranking;
   }
-}
+
+  /**
+   * Función para listar los inventos más peligrosos con su última localización de despliegue.
+   * @returns - Un array de objetos con el invento y el nombre de la localización.
+   */
+  public informeInventosPeligrosos(): { invento: Invention, nombreLocalizacion: string }[] {
+    const invenciones = this.db.data.invenciones;
+    const eventos = this.db.data.eventos || []; 
+    const localizaciones = this.db.data.ubicaciones; 
+    // Ordenamos los inventos por peligro
+    const invencionesOrdenadas = [...invenciones].sort((a, b) => b.nivelDanger - a.nivelDanger);
+
+    // Por cada invento, buscamos en el historial dónde fue desplegado por última vez
+    const resultado = invencionesOrdenadas.map((inv) => {
+      const eventoDespliegue = eventos.find((e) => 
+        e.artefactoId === inv.id
+      );
+      let nombreLoc = "Guardado (No desplegado)";
+      if (eventoDespliegue && eventoDespliegue.localizacionId) {
+        const loc = localizaciones.find((l) => l.id === eventoDespliegue.localizacionId);
+        if (loc) {
+          nombreLoc = loc.name;
+        }
+      }
+      return {
+        invento: inv,
+        nombreLocalizacion: nombreLoc
+      };
+    });
+    return resultado;
+  }
+} 
