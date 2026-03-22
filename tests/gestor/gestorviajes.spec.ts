@@ -210,4 +210,40 @@ describe("GestorViajes - Pruebas Unitarias", () => {
       "La dimensión de destino J-999 no existe en el multiverso.",
     );
   });
+
+  it ("debería eliminar un viaje correctamente", async () => {
+    const viaje: Travel = {
+      id: "V-5",
+      traveler: {
+        id: "1",
+        name: "Rick",
+        speciesId: "sp-1",
+        dimensionId: "C-137",
+        state: "vivo",
+        affiliation: "Familia",
+        nivelIntelligence: 3,
+        description: "...",
+      },
+      origin: {
+        id: "C-137",
+        name: "Tierra",
+        state: "activa",
+        nivelTecnolog: 10,
+        description: "...",
+      },
+      destination: {
+        id: "J19",
+        name: "Dimensión Doofus",
+        state: "activa",
+        nivelTecnolog: 6,
+        description: "...",
+      },
+      date: new Date(),
+      motive: "Explorar nuevas dimensiones",
+    };
+    await gestor.agregarViaje(viaje);
+    expect(gestor.obtenerViajes()).toHaveLength(1);
+
+    await gestor.eliminarViaje("V-5");
+    expect(gestor.obtenerViajes()).toHaveLength(0);
 });
