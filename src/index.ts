@@ -5,6 +5,7 @@ import { menuEspecies } from "./menus/especies.js";
 import { menuLocalizaciones } from "./menus/localizaciones.js";
 import { menuInventos } from "./menus/inventos.js";
 import { menuViajes } from "./menus/viajes.js";
+import { menuAlteraciones } from "./menus/alteraciones.js";
 
 import { db } from "./database/db.js";
 import { GestorMultiverso } from "./gestor/gestor.js";
@@ -46,6 +47,7 @@ async function menuPrincipal(): Promise<void> {
         { title: "Localizaciones", value: "localizaciones" },
         { title: "Inventos", value: "inventos" },
         { title: "Viajes", value: "viajes" },
+        { title: "Alteraciones Dimensionales", value: "alteraciones" },
         { title: "Salir del sistema", value: "salir" },
       ],
     });
@@ -78,6 +80,10 @@ async function menuPrincipal(): Promise<void> {
         break;
       case "viajes":
         await menuViajes(gestor);
+        await pausar();
+        break;
+      case "alteraciones":
+        await menuAlteraciones(gestor);
         await pausar();
         break;
       case "salir":
