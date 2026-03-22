@@ -4,18 +4,16 @@ import { Low } from "lowdb";
 import { Data } from "../database/db.js";
 
 export class GestorEspecies {
-  private db: Low<Data>; // Referencia a la base de datos
+  private db: Low<Data>;
 
-  // Constructor que recibe la base de datos desde fuera (desde nuestro db.js)
+  //* Constructor que recibe la base de datos desde fuera (desde nuestro db.js) */
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
   }
 
-  // TODA LA CONFIGURACION DE LAS ESPECIES
-
   /**
-   * Función para agregar una nueva dimensión al multiverso (base de datos), con las comprobaciones necesarias para mantener la coherencia del sistema.
-   * @param dimension - La dimensión a agregar
+   * Función para agregar una nueva especie al multiverso (base de datos)
+   * @param especie - La especie a agregar
    */
   public async agregarEspecie(especie: Species): Promise<void> {
     const existe = this.db.data.especies.find((e) => e.id === especie.id);
@@ -42,7 +40,7 @@ export class GestorEspecies {
   }
 
   /**
-   * Función para obtener la lista de dimensiones registradas en el multiverso.
+   * Función para obtener la lista de especies registradas en el multiverso.
    */
   public obtenerEspecies(): Species[] {
     return this.db.data.especies;

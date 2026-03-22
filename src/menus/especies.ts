@@ -2,6 +2,9 @@ import prompts from "prompts";
 import { Species } from "../interfaces/species.js";
 import { GestorMultiverso } from "../gestor/gestor.js";
 
+/**
+ * Función para pausar la ejecución y esperar al usuario.
+ */
 async function pausar(): Promise<void> {
   await prompts({
     type: "invisible",
@@ -10,6 +13,10 @@ async function pausar(): Promise<void> {
   });
 }
 
+/**
+ * Funcion que muestra el menú de gestión de especies
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 export async function menuEspecies(gestor: GestorMultiverso): Promise<void> {
   let volver: boolean = false;
 
@@ -52,6 +59,7 @@ export async function menuEspecies(gestor: GestorMultiverso): Promise<void> {
 
 /**
  * Flujo interactivo para pedir los datos y crear un nueva especie.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoAñadirEspecie(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- REGISTRO DE LA NUEVA ESPECIE ---");
@@ -99,29 +107,30 @@ async function flujoAñadirEspecie(gestor: GestorMultiverso): Promise<void> {
     },
   ]);
 
-  // Si el usuario cancela a mitad de las preguntas
+  /** Si el usuario cancela a mitad de las preguntas */
   if (!datos.id) {
     console.log("\n-Operación cancelada.-");
     return;
   }
 
   try {
-    // Forzamos el tipado a Species
+    /** Forzamos el tipado a Species */
     const nuevaEspecie = datos as Species;
-    // Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si el personaje es válido
+    /** Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si el personaje es válido */
     await gestor.especies.agregarEspecie(nuevaEspecie);
-    // Si todo va bien
+    /** Si todo va bien */
     console.log(
       `\n ¡Éxito! La especie ${nuevaEspecie.name} ha sido añadida al multiverso.`,
     );
   } catch (error: any) {
-    // Si se intorudce un dato incorrecto, el error se mostrará aquí
+    /** Si se intorudce un dato incorrecto, el error se mostrará aquí */
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
 
 /**
  * Funcion para eliminar una especie de la db
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoEliminarEspecie(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- ELIMINAR ESPECIE ---");
@@ -156,6 +165,7 @@ async function flujoEliminarEspecie(gestor: GestorMultiverso): Promise<void> {
 
 /**
  * Flujo interactivo para seleccionar y modificar los campos de una especie uno a uno.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoModificarEspecie(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- MODIFICAR ESPECIE ---");
@@ -177,7 +187,7 @@ async function flujoModificarEspecie(gestor: GestorMultiverso): Promise<void> {
 
   if (!respuesta.id) return;
 
-  // Creación de una copia temporal de la especie para no modificar el original
+  /** Creación de una copia temporal de la especie para no modificar el original */
   const especieOriginal = especies.find((e) => e.id === respuesta.id);
   if (!especieOriginal) {
     console.log("\nNo se encontró la especie seleccionada.");

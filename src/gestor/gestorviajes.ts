@@ -2,13 +2,25 @@ import { Travel } from "../interfaces/travels.js";
 import { Low } from "lowdb";
 import { Data } from "../database/db.js";
 
+/**
+ * Clase encargada de gestionar los viajes interdimensionales en el multiverso.
+ */
 export class GestorViajes {
   private db: Low<Data>;
 
+  /**
+   * Constructor del gestor de viajes
+   * @param baseDatos - Referencia a la base de datos (Low<Data>)
+   */
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
   }
 
+  /**
+   * Añade un nuevo viaje interdimensional al multiverso
+   * @param viaje - El viaje a agregar, con dimensiones de origen y destino, viajero, fecha y motivo.
+   * @throws - Error si las dimensiones de origen o destino no existen, o si el viajero no existe en el multiverso.
+   */
   public async agregarViaje(viaje: Travel): Promise<void> {
     const dimensionOrigen = this.db.data.dimensiones.find(
       (d) => d.id === viaje.origin.id,
@@ -41,6 +53,11 @@ export class GestorViajes {
     });
   }
 
+  /**
+   * Borra un viaje interdimensional del multiverso dado su ID.
+   * @param id - ID del viaje a eliminar
+   * @throws - Error si no existe un viaje con el ID proporcionado.
+   */
   public async eliminarViaje(id: string): Promise<void> {
     const index = this.db.data.viajes.findIndex((v) => v.id === id);
     if (index === -1) {
@@ -51,10 +68,19 @@ export class GestorViajes {
     });
   }
 
+  /**
+   * Obtiene la lista de viajes interdimensionales
+   * @returns - Lista de viajes registrados en el multiverso.
+   */
   public obtenerViajes(): Travel[] {
     return this.db.data.viajes;
   }
 
+  /**
+   * Consigue el historial de viajes realizados por un viajero específico.
+   * @param travelerId - ID del viajero
+   * @returns - Lista de viajes realizados por el viajero
+   */
   public obtenerHistorialViajesPorViajero(travelerId: string): string[] {
     const viajero = this.db.data.viajes.filter((v) => v.traveler.id === travelerId);
     if (viajero.length === 0) {

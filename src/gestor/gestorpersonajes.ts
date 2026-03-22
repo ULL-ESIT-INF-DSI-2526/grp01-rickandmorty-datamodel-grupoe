@@ -8,21 +8,19 @@ import { Low } from "lowdb";
 import { Data } from "../database/db.js";
 
 export class GestorPersonajes {
-  private db: Low<Data>; // Referencia a la base de datos
+  private db: Low<Data>;
 
-  // Constructor que recibe la base de datos desde fuera (desde nuestro db.js)
+  /** Constructor que recibe la base de datos desde fuera (desde nuestro db.js) */
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
   }
 
-  // TODA LA CONFIGURACION DE LOS PERSONAJES
-
   /**
-   * Función para agregar un nuevo personaje al multiverso, con las comprobaciones necesarias para mantener la coherencia del sistema.
+   * Función para agregar un nuevo personaje al multiverso.
    * @param personaje - Personaje a añadir
    */
   public async agregarPersonaje(personaje: Character): Promise<void> {
-    // Validación de existencia de la dimensión de origen del personaje
+    /** Validación de existencia de la dimensión de origen del personaje */
     const dimensionOrigen = this.db.data.dimensiones.find(
       (d) => d.id === personaje.dimensionId,
     );
@@ -31,7 +29,7 @@ export class GestorPersonajes {
         `La dimensión de origen ${personaje.dimensionId} no existe en el multiverso.`,
       );
     }
-    // Validación de inteligencia (escala del 1 al 10)
+    /** Validación de inteligencia (escala del 1 al 10) */
     if (personaje.nivelIntelligence < 1 || personaje.nivelIntelligence > 10) {
       throw new Error("El nivel de inteligencia debe estar entre 1 y 10.");
     }
@@ -64,6 +62,9 @@ export class GestorPersonajes {
 
   /**
    * Modifica un personaje existente sustituyendo sus datos por los nuevos.
+   * @param id - ID del personaje a modificar
+   * @param nuevosDatos - Objeto con los campos a actualizar del personaje.
+   * @throws - Error si no existe el personaje o si la nueva dimensiónId no es válida o si el nuevo nivel de inteligencia no es válido.
    */
   public async modificarPersonaje(
     id: string,
@@ -100,26 +101,32 @@ export class GestorPersonajes {
     });
   }
 
+  /**
+   * Permite consultar personajes registrados en el multiverso, aplicando filtros.
+   * @param filtro - Permite filtrar por nombre, especie, dimensión, estado, afiliación.
+   * @param orden - Permite ordenar por cualquier campo de Character en orden ascendente o descendente.
+   * @returns - Lista de personajes que coinciden con los filtros aplicados y ordenados.
+   */
   public consultarPersonajes(
     filtro?: FiltroPersonajes,
     orden?: OrdenPersonajes,
   ): Character[] {
-    // Hacemos una copia del array para no mutar el original de la base de datos al ordenar
+    /** Hacemos una copia del array para no mutar el original de la base de datos al ordenar */ 
     let resultado = [...this.db.data.personajes];
 
-    // Aplicar filtros si existen
+    /** Aplicar filtros si existen */
     if (filtro) {
       resultado = resultado.filter((p) => {
         let coincide = true;
 
-        // El nombre debe ser una búsqueda parcial
+        /** El nombre debe ser una búsqueda parcial */ 
         if (
           filtro.name &&
           !p.name.toLowerCase().includes(filtro.name.toLowerCase())
         )
           coincide = false;
 
-        // El resto de filtros son coincidencias exactas
+        /** El resto de filtros son coincidencias exactas */
         if (filtro.speciesId && p.speciesId !== filtro.speciesId)
           coincide = false;
         if (filtro.dimensionId && p.dimensionId !== filtro.dimensionId)
@@ -132,7 +139,7 @@ export class GestorPersonajes {
       });
     }
 
-    // Aplicar ordenación
+    /** Aplicar ordenación */
     if (orden) {
       resultado.sort((a, b) => {
         const valorA = a[orden.campo];

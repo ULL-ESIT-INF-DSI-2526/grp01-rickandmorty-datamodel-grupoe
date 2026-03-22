@@ -2,6 +2,9 @@ import prompts from "prompts";
 import { Dimension } from "../interfaces/dimension.js";
 import { GestorMultiverso } from "../gestor/gestor.js";
 
+/**
+ * Función para pausar la ejecución y esperar al usuario.
+ */
 async function pausar(): Promise<void> {
   await prompts({
     type: "invisible",
@@ -10,6 +13,10 @@ async function pausar(): Promise<void> {
   });
 }
 
+/**
+ * Funcion que muestra el menú de gestión de dimensiones
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 export async function menuDimensiones(gestor: GestorMultiverso): Promise<void> {
   let volver: boolean = false;
 
@@ -93,23 +100,23 @@ async function flujoAñadirDimension(gestor: GestorMultiverso): Promise<void> {
     },
   ]);
 
-  // Si el usuario cancela a mitad de las preguntas
+  /** Si el usuario cancela a mitad de las preguntas */ 
   if (!datos.id) {
     console.log("\n-Operación cancelada.-");
     return;
   }
 
   try {
-    // Forzamos el tipado a Dimension
+    /** Forzamos el tipado a Dimension */
     const nuevaDimension = datos as Dimension;
-    // Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si la dimensión es válida
+    /** Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si la dimensión es válida */
     await gestor.dimensiones.agregarDimension(nuevaDimension);
-    // Si todo va bien
+    /** Si todo va bien */
     console.log(
       `\n ¡Éxito! La nueva dimension: ${nuevaDimension.name} ha sido añadido al multiverso.`,
     );
   } catch (error: any) {
-    // Si se intorudce una dimensión que no existe o un dato incorrecto, el error se mostrará aquí
+    /** Si se intorudce una dimensión que no existe o un dato incorrecto, el error se mostrará aquí */
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
@@ -149,7 +156,7 @@ async function flujoEliminarDimension(gestor: GestorMultiverso): Promise<void> {
 }
 
 /**
- * Flujo interactivo para seleccionar y modificar los campos de una dimensión uno a uno.
+ * Flujo para seleccionar y modificar los campos de una dimensión uno a uno.
  */
 async function flujoModificarDimension(
   gestor: GestorMultiverso,
@@ -173,7 +180,7 @@ async function flujoModificarDimension(
 
   if (!respuesta.id) return;
 
-  // Creación de una copia temporal de la especie para no modificar el original
+  /** Creación de una copia temporal de la especie para no modificar el original */
   const dimensionOriginal = dimensiones.find((p) => p.id === respuesta.id);
   let copiaDimension: Partial<Dimension> = { ...dimensionOriginal };
   let editando: boolean = true;

@@ -13,7 +13,7 @@ import { GestorMultiverso } from "./gestor/gestor.js";
  * Función auxiliar que devuelve una Promesa vacía. Se utiliza para pausar la ejecución
  * y esperar a que el usuario presione Enter antes de continuar, lo que permite leer mensajes en pantalla.
  */
-async function pausar(): Promise<void> {
+export async function pausar(): Promise<void> {
   await prompts({
     type: "invisible",
     name: "pausa",
@@ -22,18 +22,17 @@ async function pausar(): Promise<void> {
 }
 
 /**
- * Funcion que muestra el menú principal del sistema y permite navegar a los diferentes submenús de gestión de personajes, dimensiones, especies, localizaciones e inventos. Recibe una instancia del gestor para que los
- * demás menús puedan interactuar con la base de datos.
- */
-async function menuPrincipal(): Promise<void> {
-  const gestor = new GestorMultiverso(db); // Creamos una instancia del gestor pasando la base de datos
+* Funcion que muestra el menú principal del sistema y permite navegar a los diferentes submenús
+*/
+export async function menuPrincipal(): Promise<void> {
+  const gestor = new GestorMultiverso(db);
 
   let salir: boolean = false;
 
   while (!salir) {
     console.clear();
 
-    // Podemos definir el tipo de la respuesta esperada
+    /** Podemos definir el tipo de la respuesta esperada */
     const respuesta = await prompts<"opcion">({
       type: "select",
       name: "opcion",
@@ -57,8 +56,8 @@ async function menuPrincipal(): Promise<void> {
 
     switch (respuesta.opcion) {
       case "personajes":
-        await menuPersonajes(gestor); // Pasamos el gestor al menú de personajes para que pueda interactuar con la base de datos
-        await pausar(); // Pausamos después de volver del menú para que el usuario pueda leer cualquier mensaje antes de limpiar la consola
+        await menuPersonajes(gestor); /* Pasamos el gestor al menú de personajes para que pueda interactuar con la base de datos */
+        await pausar(); /* Pausamos después de volver del menú para que el usuario pueda leer cualquier mensaje antes de limpiar la consola */
         break;
       case "dimensiones":
         await menuDimensiones(gestor);

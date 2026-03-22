@@ -2,6 +2,9 @@ import prompts from "prompts";
 import { Invention, FiltroInventos } from "../interfaces/invention.js";
 import { GestorMultiverso } from "../gestor/gestor.js";
 
+/**
+ * Función para pausar la ejecución y esperar al usuario.
+ */
 async function pausar(): Promise<void> {
   await prompts({
     type: "invisible",
@@ -10,6 +13,10 @@ async function pausar(): Promise<void> {
   });
 }
 
+/**
+ * Menu de gestión de inventos
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 export async function menuInventos(gestor: GestorMultiverso): Promise<void> {
   let volver: boolean = false;
 
@@ -58,6 +65,7 @@ export async function menuInventos(gestor: GestorMultiverso): Promise<void> {
 
 /**
  * Flujo interactivo para pedir los datos y crear un nuevo invento.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoAñadirInvento(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- REGISTRO DEL NUEVO INVENTO ---");
@@ -122,6 +130,7 @@ async function flujoAñadirInvento(gestor: GestorMultiverso): Promise<void> {
 
 /**
  * Funcion para eliminar una especie de la db
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoEliminarInvento(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- ELIMINAR INVENTO ---");
@@ -241,6 +250,10 @@ async function flujoModificarInvento(gestor: GestorMultiverso): Promise<void> {
   }
 }
 
+/**
+ * Consulta de inventos con opción de filtrar por diferentes campos.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 async function flujoConsultarInventos(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- CONSULTAR INVENTOS ---");
 

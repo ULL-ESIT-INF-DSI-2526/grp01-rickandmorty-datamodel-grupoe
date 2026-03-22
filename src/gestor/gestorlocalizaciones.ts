@@ -3,18 +3,16 @@ import { Low } from "lowdb";
 import { Data } from "../database/db.js";
 
 export class GestorLocalizaciones {
-  private db: Low<Data>; // Referencia a la base de datos
+  private db: Low<Data>;
 
-  // Constructor que recibe la base de datos desde fuera (desde nuestro db.js)
+  /** Constructor que recibe la base de datos desde fuera (desde nuestro db.js)*/ 
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
   }
 
-  // TODA LA CONFIGURACION DE LAS ESPECIES
-
   /**
-   * Función para agregar una nueva localizacion al multiverso (base de datos), con las comprobaciones necesarias para mantener la coherencia del sistema.
-   * @param dimension - La localización a agregar
+   * Función para agregar una nueva localizacion al multiverso (base de datos)
+   * @param localizacion - La localización a agregar
    */
   public async agregarLocalizacion(localizacion: Location): Promise<void> {
     const existe = this.db.data.ubicaciones.find(
@@ -53,14 +51,17 @@ export class GestorLocalizaciones {
   }
 
   /**
-   * Función para obtener la lista de dimensiones registradas en el multiverso.
+   * Función para obtener la lista de localizaciones registradas en el multiverso.
    */
   public obtenerLocalizaciones(): Location[] {
     return this.db.data.ubicaciones;
   }
 
   /**
-   * Modifica una localización existente sustituyendo sus datos por los nuevos.
+   * Permite modificar una localización existente por ID.
+   * @param id - ID de la localización a modificar
+   * @param nuevosDatos - Objeto con los campos a actualizar de la localización
+   * @throws - Error si no existe la localización o si la nueva dimensiónId no es válida
    */
   public async modificarLocalizacion(
     id: string,
@@ -85,6 +86,11 @@ export class GestorLocalizaciones {
     });
   }
 
+  /**
+   * Consulta localizaciones registradas en el multiverso, aplicando filtros.
+   * @param filtro - Permite filtrar por nombre, tipo o dimensiónId.
+   * @returns - Lista de localizaciones que coinciden con los filtros aplicados.
+   */
   public consultarLocalizacion(filtro?: FiltroLocalizaciones): Location[] {
     let localizaciones = [...this.db.data.ubicaciones];
 

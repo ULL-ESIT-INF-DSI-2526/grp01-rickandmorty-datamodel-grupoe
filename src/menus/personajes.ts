@@ -6,6 +6,9 @@ import {
 } from "../interfaces/character.js";
 import { GestorMultiverso } from "../gestor/gestor.js";
 
+/**
+ * Función para pausar la ejecución y esperar al usuario.
+ */
 async function pausar(): Promise<void> {
   await prompts({
     type: "invisible",
@@ -14,6 +17,10 @@ async function pausar(): Promise<void> {
   });
 }
 
+/**
+ * Menu de gestión de personajes.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 export async function menuPersonajes(gestor: GestorMultiverso): Promise<void> {
   let volver: boolean = false;
 
@@ -66,6 +73,7 @@ export async function menuPersonajes(gestor: GestorMultiverso): Promise<void> {
 
 /**
  * Flujo interactivo para pedir los datos y crear un nuevo personaje.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoAñadirPersonaje(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- REGISTRO DEL NUEVO PERSONAJE ---");
@@ -122,29 +130,29 @@ async function flujoAñadirPersonaje(gestor: GestorMultiverso): Promise<void> {
     },
   ]);
 
-  // Si el usuario cancela a mitad de las preguntas
+  /** Si el usuario cancela a mitad de las preguntas */
   if (!datos.id) {
     console.log("\n-Operación cancelada.-");
     return;
   }
 
   try {
-    // Forzamos el tipado a Character
+    /** Forzamos el tipado a Character */
     const nuevoPersonaje = datos as Character;
-    // Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si el personaje es válido
+    /** Llamamos a la función del gestor */
     await gestor.personajes.agregarPersonaje(nuevoPersonaje);
-    // Si todo va bien
     console.log(
       `\n ¡Éxito! El personaje ${nuevoPersonaje.name} ha sido añadido al multiverso.`,
     );
   } catch (error: any) {
-    // Si se intorudce un dato incorrecto, el error se mostrará aquí
+    /** Si se intorudce un dato incorrecto, el error se mostrará aquí */
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
 
 /**
  * Funcion para eliminar un personaje de la db
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoEliminarPersonaje(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- ELIMINAR PERSONAJE ---");
@@ -179,6 +187,7 @@ async function flujoEliminarPersonaje(gestor: GestorMultiverso): Promise<void> {
 
 /**
  * Flujo interactivo para seleccionar y modificar los campos de un personaje uno a uno.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 export async function flujoModificarPersonaje(
   gestor: GestorMultiverso,
@@ -191,7 +200,7 @@ export async function flujoModificarPersonaje(
     return;
   }
 
-  // Selección de personaje a modificar
+  /** Selección de personaje a modificar */
   const respuestaId = await prompts({
     type: "select",
     name: "id",
@@ -204,12 +213,12 @@ export async function flujoModificarPersonaje(
 
   if (!respuestaId.id) return;
 
-  // Creación de una copia temporal del personaje para no modificar el original
+  /** Creación de una copia temporal del personaje para no modificar el original */
   const personajeOriginal = personajes.find((p) => p.id === respuestaId.id)!;
   let copiaPersonaje = { ...personajeOriginal };
   let editando = true;
 
-  // Bucle para mostrar el menú de edición hasta que el usuario decida guardar o cancelar
+  /** Bucle para mostrar el menú de edición */
   while (editando) {
     console.clear();
     console.log("--- EDITANDO PERSONAJE ---");
@@ -254,11 +263,11 @@ export async function flujoModificarPersonaje(
       continue;
     }
 
-    // Dependiendo del campo seleccionado, el tipo de prompt puede variar (texto, número, selección)
+    /** Dependiendo del campo seleccionado, el tipo de prompt puede variar (texto, número, selección) */
     let tipoPrompt: "text" | "select" | "number" = "text";
     let opcionesSelect: any = undefined;
 
-    // Obtenemos el valor actual que tiene el personaje en ese campo
+    /** Obtenemos el valor actual que tiene el personaje en ese campo */
     let valorInicial: any =
       copiaPersonaje[menuEdicion.campo as keyof Character];
 
@@ -289,13 +298,17 @@ export async function flujoModificarPersonaje(
       max: menuEdicion.campo === "nivelIntelligence" ? 10 : undefined,
     });
 
-    // Aplicar el cambio a la copia temporal
+    /** Aplicar el cambio a la copia temporal */
     if (nuevoValor !== undefined) {
       (copiaPersonaje as any)[menuEdicion.campo] = nuevoValor;
     }
   }
 }
 
+/**
+ * Consulta de personajes con opción de filtrar por diferentes campos y ordenarlos.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 export async function flujoConsultarPersonajes(
   gestor: GestorMultiverso,
 ): Promise<void> {
@@ -392,6 +405,10 @@ export async function flujoConsultarPersonajes(
   }
 }
 
+/**
+ * Flujo para localizar versiones alternativas de un personaje dado su ID.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 async function flujoLocalizarVersionesAlternativas(
   gestor: GestorMultiverso,
 ): Promise<void> {
@@ -403,6 +420,7 @@ async function flujoLocalizarVersionesAlternativas(
     return;
   }
 
+  /** Selección de personaje a modificar */
   const respuesta = await prompts({
     type: "select",
     name: "id",
@@ -419,6 +437,7 @@ async function flujoLocalizarVersionesAlternativas(
     return;
   }
 
+  /** Búsqueda de versiones alternativas */
   try {
     const versionesAlternativas =
       gestor.personajes.localizarVersionesAlternativas(respuesta.id);

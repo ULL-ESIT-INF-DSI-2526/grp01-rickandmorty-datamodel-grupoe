@@ -3,18 +3,22 @@ import { Low } from "lowdb";
 
 import { Data } from "../database/db.js";
 
+/**
+ * Clase encargada de gestionar las dimensiones en el multiverso.
+ */
 export class GestorDimensiones {
-  private db: Low<Data>; // Referencia a la base de datos
+  private db: Low<Data>;
 
-  // Constructor que recibe la base de datos desde fuera (desde nuestro db.js)
+/**
+ * Constructor del gestor de dimensiones
+ * @param baseDatos - Referencia a la base de datos (Low<Data>)
+ */
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
   }
 
-  // TODA LA CONFIGURACION DE LAS DIMENSIONES
-
   /**
-   * Función para agregar una nueva dimensión al multiverso (base de datos), con las comprobaciones necesarias para mantener la coherencia del sistema.
+   * Función para agregar una nueva dimensión al multiverso (base de datos)
    * @param dimension - La dimensión a agregar
    */
   public async agregarDimension(dimension: Dimension): Promise<void> {

@@ -8,16 +8,20 @@ export type stateCharacter = "vivo" | "muerto" | "desconocido" | "robot";
  * Interfaz para representar un personaje en el universo de Rick and Morty.
  */
 export interface Character {
-  id: string;
-  name: string;
-  speciesId: string; // Referencia al ID de la especie del personaje, NO SE SI ES ASI LO DE REFERENCIA
-  dimensionId: string; // Referencia al ID de la dimensión a la que pertenece el personaje, NO SE SI ES ASI LO DE REFERENCIA
-  state: stateCharacter;
-  affiliation: string;
-  nivelIntelligence: number;
-  description: string;
+  id: string; /** Id del personaje */
+  name: string; /** Nombre del personaje */
+  speciesId: string; /** Id de la especie del personaje */
+  dimensionId: string; /** Id de la dimensión a la que pertenece el personaje */
+  state: stateCharacter; /** Estado del personaje (vivo, muerto, desconocido, robot) */
+  affiliation: string; /** Afiliación del personaje */
+  nivelIntelligence: number; /** Nivel de inteligencia del personaje */
+  description: string; /** Descripción del personaje */
 }
 
+/**
+ * Interfaz para representar un filtro de búsqueda de personajes.
+ * Permite filtrar por nombre, especie, dimensión, estado o afiliación.
+ */
 export interface FiltroPersonajes {
   name?: string;
   speciesId?: string;
@@ -26,6 +30,10 @@ export interface FiltroPersonajes {
   affiliation?: string;
 }
 
+/**
+ * Interfaz para representar el ordenamiento de personajes.
+ * Permite ordenar por cualquier campo de Character en orden ascendente o descendente.
+ */
 export interface OrdenPersonajes {
   campo: "name" | "nivelIntelligence";
   direccion: "asc" | "desc";

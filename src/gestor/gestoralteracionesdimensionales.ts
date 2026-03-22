@@ -3,13 +3,20 @@ import { Data } from '../database/db.js';
 import { Dimension } from '../interfaces/dimension.js';
 import { AlteracionDimension } from '../interfaces/dimensionalteration.js';
 
+/**
+ * Clase encargada de gestionar las alteraciones dimensionales en el multiverso.
+ */
 export class GestorAlteracionesDimensionales {
   private db: Low<Data>;
 
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
   }
-
+  /**
+   * Registra una nueva alteración dimensional
+   * @param alteracion - Detalles de la alteración
+   * @param nuevaDimension - Datos de la nueva dimensión (solo para alteraciones de tipo 'creacion')
+   */
   public async registrarAlteracion(alteracion: AlteracionDimension, nuevaDimension?: Dimension): Promise<void> {
     await this.db.update((data) => {
       if (!data.alteracionesDimensionales) data.alteracionesDimensionales = [];

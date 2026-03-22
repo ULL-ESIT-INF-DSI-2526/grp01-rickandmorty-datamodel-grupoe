@@ -2,6 +2,9 @@ import prompts from "prompts";
 import { Location, FiltroLocalizaciones } from "../interfaces/location.js";
 import { GestorMultiverso } from "../gestor/gestor.js";
 
+/**
+ * Función para pausar la ejecución y esperar al usuario.
+ */
 async function pausar(): Promise<void> {
   await prompts({
     type: "invisible",
@@ -10,6 +13,10 @@ async function pausar(): Promise<void> {
   });
 }
 
+/**
+ * Menu de gestión de localizaciones
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 export async function menuLocalizaciones(
   gestor: GestorMultiverso,
 ): Promise<void> {
@@ -60,12 +67,13 @@ export async function menuLocalizaciones(
 
 /**
  * Flujo interactivo para pedir los datos y crear un nueva localización.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoAñadirLocalizacion(
   gestor: GestorMultiverso,
 ): Promise<void> {
   console.log("\n--- REGISTRO DE LA NUEVA LOCALIZACIÓN ---");
-  // Asegurarse que los name sean igual que lo de las interfaces para que no de fallos al pasarlo al tipo de datos del Location
+  /** Asegurarse que los name sean igual que lo de las interfaces para que no de fallos al pasarlo al tipo de datos del Location */ 
   const datos = await prompts([
     {
       type: "text",
@@ -102,29 +110,25 @@ async function flujoAñadirLocalizacion(
     },
   ]);
 
-  // Si el usuario cancela a mitad de las preguntas
+  /** Si el usuario cancela a mitad de las preguntas */
   if (!datos.id) {
     console.log("\n-Operación cancelada.-");
     return;
   }
 
   try {
-    // Forzamos el tipado a Location
     const nuevaLocalizacion = datos as Location;
-    // Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si el personaje es válido
     await gestor.localizaciones.agregarLocalizacion(nuevaLocalizacion);
-    // Si todo va bien
-    console.log(
-      `\n ¡Éxito! La localización ${nuevaLocalizacion.name} ha sido añadida al multiverso.`,
-    );
+    console.log(`\n ¡Éxito! La localización ${nuevaLocalizacion.name} ha sido añadida al multiverso.`,);
   } catch (error: any) {
-    // Si se intorudce un dato incorrecto, el error se mostrará aquí
+    /** Si se intorudce un dato incorrecto */
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
 
 /**
  * Funcion para eliminar una localización de la db
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
  */
 async function flujoEliminarLocalizacion(
   gestor: GestorMultiverso,
@@ -159,6 +163,10 @@ async function flujoEliminarLocalizacion(
   }
 }
 
+/**
+ * Modificación de una localización existente
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 async function flujoModificarLocalizacion(
   gestor: GestorMultiverso,
 ): Promise<void> {
@@ -184,7 +192,7 @@ async function flujoModificarLocalizacion(
     return;
   }
 
-  // Copia de la localización original para modificarla
+  /** Copia de la localización original para modificarla */
   const localizacionOriginal = localizaciones.find(
     (l) => l.id === respuesta.id,
   );
@@ -232,10 +240,10 @@ async function flujoModificarLocalizacion(
 
     let tipoPrompt: "text" | "number" | "select" = "text";
 
-    // Usamos keyof para el "noImplicitAny"
+    /** Usamos keyof para el "noImplicitAny" */
     let valorInicial: any = copia[menuEdit.campo as keyof Location];
 
-    // Población positiva o cero
+    /** Población positiva o cero */
     if (menuEdit.campo === "population") {
       tipoPrompt = "number";
       valorInicial =
@@ -268,12 +276,17 @@ async function flujoModificarLocalizacion(
       choices: opcionesDimension.length > 0 ? opcionesDimension : undefined,
     });
 
+    /** Actualizamos la copia con el nuevo valor */
     if (respuestaCampo.valor !== undefined) {
-      (copia as any)[menuEdit.campo] = respuestaCampo.valor; // Actualizamos la copia con el nuevo valor
+      (copia as any)[menuEdit.campo] = respuestaCampo.valor; 
     }
   }
 }
 
+/**
+ * Consulta de localizaciones con opción de filtrar por diferentes campos.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 export async function flujoConsultarLocalizaciones(
   gestor: GestorMultiverso,
 ): Promise<void> {
@@ -307,7 +320,6 @@ export async function flujoConsultarLocalizaciones(
     });
 
     if (!valorFiltro) return;
-
     filtro = { [campoFiltro]: valorFiltro };
   }
 

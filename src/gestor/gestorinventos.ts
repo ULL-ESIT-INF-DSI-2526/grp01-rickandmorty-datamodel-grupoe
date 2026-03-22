@@ -4,18 +4,16 @@ import { Low } from "lowdb";
 import { Data } from "../database/db.js";
 
 export class GestorInventos {
-  private db: Low<Data>; // Referencia a la base de datos
+  private db: Low<Data>;
 
   // Constructor que recibe la base de datos desde fuera (desde nuestro db.js)
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
   }
 
-  // TODA LA CONFIGURACION DE LOS INVENTOS
-
   /**
-   * Función para agregar una nueva dimensión al multiverso (base de datos), con las comprobaciones necesarias para mantener la coherencia del sistema.
-   * @param dimension - La dimensión a agregar
+   * Función para agregar un nuevo invento al multiverso
+   * @param invention - El invento a agregar
    */
   public async agregarInvento(invention: Invention): Promise<void> {
     const existe = this.db.data.invenciones.find((i) => i.id === invention.id);
@@ -51,16 +49,21 @@ export class GestorInventos {
   }
 
   /**
-   * Función para obtener la lista de dimensiones registradas en el multiverso.
+   * Función para obtener la lista de inventos registrados en el multiverso.
    */
   public obtenerInventos(): Invention[] {
     return this.db.data.invenciones;
   }
 
+  /**
+   * Permite modificar un invento existente por ID, actualizando solo los campos proporcionados en nuevosDatos.
+   * @param id - ID del invento a modificar
+   * @param nuevosDatos - Objeto con los campos a actualizar del invento
+   */
   public async modificarInvento(
     id: string,
-    nuevosDatos: Partial<Invention>,
-  ): Promise<void> {
+    nuevosDatos: Partial<Invention>,  // Partial permite actualizar solo algunos campos
+  ): Promise<void> { 
     const invent = this.db.data.invenciones.findIndex((i) => i.id === id);
     if (invent === -1) {
       throw new Error(`No existe un invento con el ID ${id}`);
@@ -70,6 +73,11 @@ export class GestorInventos {
     });
   }
 
+  /**
+   * Permite consultar inventos registrados en el multiverso, aplicando filtros.
+   * @param filtro - Permite filtrar por nombre, tipo, inventor o peligro.
+   * @returns - Lista de inventos que coinciden con los filtros aplicados.
+   */
   public async consultarInventos(
     filtro?: Partial<Invention>,
   ): Promise<Invention[]> {

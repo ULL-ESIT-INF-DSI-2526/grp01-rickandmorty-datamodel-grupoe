@@ -24,9 +24,13 @@ export class GestorMultiverso {
   public viajes: GestorViajes;
   public alteracionesDimensionales: GestorAlteracionesDimensionales;
 
-  private db: Low<Data>; // Referencia a la base de datos
+/** Referencia a la base de datos */
+  private db: Low<Data>;
 
-  // Constructor que recibe la base de datos desde fuera (desde nuestro db.js)
+/**
+ * Constructor del gestor
+ * @param baseDatos - Referencia a base de datos (Low<Data>)
+ */
   constructor(baseDatos: Low<Data>) {
     this.db = baseDatos;
     this.dimensiones = new GestorDimensiones(baseDatos);

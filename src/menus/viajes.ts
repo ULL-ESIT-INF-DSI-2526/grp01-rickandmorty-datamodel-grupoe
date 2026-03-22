@@ -1,6 +1,9 @@
 import prompts from "prompts";
 import { GestorMultiverso } from "../gestor/gestor.js";
 
+/**
+ * Función para pausar la ejecución y esperar al usuario.
+ */
 async function pausar(): Promise<void> {
   await prompts({
     type: "invisible",
@@ -9,6 +12,10 @@ async function pausar(): Promise<void> {
   });
 }
 
+/**
+ * Menu de gestión de viajes
+ * @param gestorViajes - Instancia del gestor para poder interactuar con la base de datos
+ */
 export async function menuViajes(
   gestorViajes: GestorMultiverso,
 ): Promise<void> {
@@ -55,6 +62,10 @@ export async function menuViajes(
   }
 }
 
+/**
+ * Flujo para añadir un nuevo viaje
+ * @param gestorViajes - Instancia del gestor para poder interactuar con la base de datos
+ */
 async function flujoAñadirViaje(gestorViajes: GestorMultiverso): Promise<void> {
   console.log("--- AÑADIR VIAJE ---");
   const datos = await prompts([
@@ -94,6 +105,7 @@ async function flujoAñadirViaje(gestorViajes: GestorMultiverso): Promise<void> 
       type: "text",
       name: "date",
       message: "Fecha del viaje (YYYY-MM-DD):",
+      /** Hace la validación del formato de fecha */
       validate: (v) =>
         /^\d{4}-\d{2}-\d{2}$/.test(v) ? true : "Formato de fecha inválido.",
     },
@@ -116,6 +128,7 @@ async function flujoAñadirViaje(gestorViajes: GestorMultiverso): Promise<void> 
     return;
   }
 
+  /** Búsqueda del viajero */
   const viajero = gestorViajes.personajes
     .obtenerPersonajes()
     .find((p) => p.id === datos.travelerId);
@@ -125,6 +138,8 @@ async function flujoAñadirViaje(gestorViajes: GestorMultiverso): Promise<void> 
     );
     return;
   }
+
+  /** Búsqueda de la dimensión de origen */
   const dimensionOrigen = gestorViajes.dimensiones
     .obtenerDimensiones()
     .find((d) => d.id === datos.originId);
@@ -134,6 +149,8 @@ async function flujoAñadirViaje(gestorViajes: GestorMultiverso): Promise<void> 
     );
     return;
   }
+
+  /** Búsqueda de la dimensión de destino */
   const dimensionDestino = gestorViajes.dimensiones
     .obtenerDimensiones()
     .find((d) => d.id === datos.destinationId);
@@ -144,6 +161,7 @@ async function flujoAñadirViaje(gestorViajes: GestorMultiverso): Promise<void> 
     return;
   }
 
+  /** Creación del viaje */
   await gestorViajes.viajes.agregarViaje({
     id: datos.id,
     traveler: viajero,
@@ -155,6 +173,10 @@ async function flujoAñadirViaje(gestorViajes: GestorMultiverso): Promise<void> 
   console.log("Viaje agregado exitosamente.");
 }
 
+/**
+ * Flujo para eliminar un viaje existente
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 async function flujoEliminarViaje(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- ELIMINAR VIAJE ---");
   const viajes = gestor.viajes.obtenerViajes();
@@ -182,6 +204,10 @@ async function flujoEliminarViaje(gestor: GestorMultiverso): Promise<void> {
   console.log("\n¡Viaje eliminado exitosamente!");
 }
 
+/**
+ * Función para eliminar un viaje de la db
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ */
 async function flujoConsultarViajes(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- LISTA DE VIAJES ---");
   const viajes = gestor.viajes.obtenerViajes();
@@ -201,6 +227,11 @@ async function flujoConsultarViajes(gestor: GestorMultiverso): Promise<void> {
   );
 }
 
+/**
+ * Creación de un informe que muestre el historial de viajes de un viajero.
+ * @param gestor - Instancia del gestor para poder interactuar con la base de datos
+ * @returns 
+ */
 async function flujoInformeViajesPorViajero(gestor: GestorMultiverso): Promise<void> {
   console.log("\n--- INFORME DE VIAJES POR VIAJERO ---");
   const viajeros = gestor.personajes.obtenerPersonajes();
@@ -209,6 +240,7 @@ async function flujoInformeViajesPorViajero(gestor: GestorMultiverso): Promise<v
     return;
   }
 
+  /** Selección del viajero */
   const respuesta = await prompts({
     type: "select",
     name: "travelerId",
