@@ -4,6 +4,8 @@ import { GestorEspecies } from "./gestorespecies.js";
 import { GestorLocalizaciones } from "./gestorlocalizaciones.js";
 import { GestorInventos } from "./gestorinventos.js";
 import { GestorViajes } from "./gestorviajes.js";
+import { GestorAlteracionesDimensionales } from "./gestoralteracionesdimensionales.js";
+
 import { Low } from "lowdb";
 
 import { Data } from "../database/db.js";
@@ -20,6 +22,7 @@ export class GestorMultiverso {
   public localizaciones: GestorLocalizaciones;
   public inventos: GestorInventos;
   public viajes: GestorViajes;
+  public alteracionesDimensionales: GestorAlteracionesDimensionales;
 
   private db: Low<Data>; // Referencia a la base de datos
 
@@ -32,5 +35,6 @@ export class GestorMultiverso {
     this.localizaciones = new GestorLocalizaciones(baseDatos);
     this.inventos = new GestorInventos(baseDatos);
     this.viajes = new GestorViajes(baseDatos);
+    this.alteracionesDimensionales = new GestorAlteracionesDimensionales(baseDatos);
   }
 }

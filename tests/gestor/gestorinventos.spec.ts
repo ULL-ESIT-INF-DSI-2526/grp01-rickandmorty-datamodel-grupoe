@@ -18,6 +18,7 @@ describe("GestorInventos - Pruebas Unitarias", () => {
         ubicaciones: [],
         invenciones: [],
         viajes: [],
+        alteracionesDimensionales: [],
       },
     );
 

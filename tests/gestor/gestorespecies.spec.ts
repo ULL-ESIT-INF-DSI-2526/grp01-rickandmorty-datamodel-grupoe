@@ -18,6 +18,7 @@ describe("GestorEspecies - Pruebas Unitarias", () => {
         ubicaciones: [],
         invenciones: [],
         viajes: [],
+        alteracionesDimensionales: [],
       },
     );
 
