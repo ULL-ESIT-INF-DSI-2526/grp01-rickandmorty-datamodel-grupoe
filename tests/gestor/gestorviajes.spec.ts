@@ -211,7 +211,7 @@ describe("GestorViajes - Pruebas Unitarias", () => {
     );
   });
 
-  it ("debería eliminar un viaje correctamente", async () => {
+  it("debería eliminar un viaje correctamente", async () => {
     const viaje: Travel = {
       id: "V-5",
       traveler: {
