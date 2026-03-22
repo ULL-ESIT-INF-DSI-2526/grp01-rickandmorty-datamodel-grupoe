@@ -470,4 +470,10 @@ describe("GestorPersonajes - Pruebas Unitarias", () => {
     const versionesMorty = gestor.localizarVersionesAlternativas("P-4");
     expect(versionesMorty).toHaveLength(0);
   });
+
+  it("debería lanzar un error al localizar versiones alternativas de un personaje inexistente", async () => {
+     expect(() => gestor.localizarVersionesAlternativas("P-999")).toThrow(
+      "No existe un personaje con el ID P-999",
+    );
+  });
 });

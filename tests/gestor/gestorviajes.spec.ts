@@ -327,4 +327,9 @@ describe("GestorViajes - Pruebas Unitarias", () => {
       "Viaje ID: V-7 Origen: Dimensión Doofus (ID: J19) Destino: Tierra (ID: C-137)",
     );
   });
+
+  it ("debería retornar un mensaje vacío al obtener el historial de viajes de un viajero sin viajes", async () => {
+    const historial = gestor.obtenerHistorialViajesPorViajero("999");
+    expect(historial).toHaveLength(0);
+  });
 });

@@ -203,4 +203,20 @@ describe("GestorLocalizaciones - Pruebas Unitarias", () => {
     expect(resultado3).toHaveLength(1);
     expect(resultado3[0]).toEqual(localizacion2);
   });
+
+  it ("debería lanzar un error al haber una localización con id existente al agregar una nueva", async () => {
+    const localizacion: Location = {
+      id: "L-10",
+      name: "Planeta MNO",
+      type: "Planeta",
+      dimensionId: "C-137",
+      population: 5000,
+      description: "...",
+    };
+    await gestor.agregarLocalizacion(localizacion);
+
+    await expect(gestor.agregarLocalizacion(localizacion)).rejects.toThrow(
+      "Ya existe una localización con el ID L-10"
+    );
+  });
 });
