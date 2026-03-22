@@ -19,6 +19,7 @@ describe("GestorPersonajes - Pruebas Unitarias", () => {
         invenciones: [],
         viajes: [],
         alteracionesDimensionales: [],
+        eventos: [],
       },
     );
 

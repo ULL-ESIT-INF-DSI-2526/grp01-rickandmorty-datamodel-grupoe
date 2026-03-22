@@ -17,7 +17,8 @@ describe('GestorAlteracionesDimensionales - Registro de Alteraciones', () => {
       ubicaciones: [],
       invenciones: [],
       viajes: [],
-      alteracionesDimensionales: []
+      alteracionesDimensionales: [],
+      eventos: [],
     });
 
     dbTest.data.dimensiones = [];

@@ -23,6 +23,7 @@ describe("GestorInformes - Pruebas Unitarias", () => {
         invenciones: [],
         viajes: [],
         alteracionesDimensionales: [],
+        eventos: [],
       },
     );
 
@@ -98,6 +99,33 @@ describe("GestorInformes - Pruebas Unitarias", () => {
         description: "...",
       }
     ];
+    dbTest.data.ubicaciones = [
+      {
+        id: "LOC-01",
+        name: "Ciudadela de Ricks",
+        type: "ciudad",
+        dimensionId: "C-137",
+        population: 1000000,
+        description: "...",
+      },
+    ];
+    dbTest.data.invenciones = [
+      {
+        id: "INV-01",
+        name: "Portal Gun",
+        inventorId: "1",
+        type: "transporte",
+        nivelDanger: 8,
+        description: "...",
+      },
+    ];
+    dbTest.data.eventos = [
+      {
+        id: "EVT-01",
+        artefactoId: "INV-01",
+        localizacionId: "LOC-01",
+      },
+    ];
     await dbTest.write();
 
     // Instanciamos el gestor pasandole esta base de datos de mentira
@@ -138,4 +166,11 @@ describe("GestorInformes - Pruebas Unitarias", () => {
     const informe = gestor.informeVersionesAlternativas();
     expect(informe).toHaveLength(0);
   });
+
+  it("deberia listar los inventos peligrosos con su ultima localizacion de despliegue", async () => {
+    const informe = gestor.informeInventosPeligrosos();
+    expect(informe).toHaveLength(1);
+    expect(informe[0].invento.id).toBe("INV-01");
+    expect(informe[0].nombreLocalizacion).toBe("Ciudadela de Ricks");
+    });
 });
