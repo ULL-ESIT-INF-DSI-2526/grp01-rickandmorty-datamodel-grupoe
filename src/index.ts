@@ -8,10 +8,8 @@ import { menuInventos } from './menus/inventos.js';
 import { db } from './database/db.js'; 
 import { GestorMultiverso } from './gestor/gestor.js';
 
-
-
 /**
- * Función auxiliar tipada que devuelve una Promesa vacía. Se utiliza para pausar la ejecución
+ * Función auxiliar que devuelve una Promesa vacía. Se utiliza para pausar la ejecución
  * y esperar a que el usuario presione Enter antes de continuar, lo que permite leer mensajes en pantalla.
  */
 async function pausar(): Promise<void> {
@@ -63,7 +61,6 @@ async function menuPrincipal(): Promise<void> {
         await menuDimensiones(gestor); 
         await pausar(); 
         break;
-      // ... (resto de casos)
       case 'especies':
         await menuEspecies(gestor); 
         await pausar();

@@ -56,7 +56,7 @@ export async function menuInventos(gestor: GestorMultiverso): Promise<void> {
  * Flujo interactivo para pedir los datos y crear un nuevo invento.
  */
 async function flujoAñadirInvento(gestor: GestorMultiverso): Promise<void> {
-  console.log('\n--- REGISTRO DEL NUEVO INVENCION ---');
+  console.log('\n--- REGISTRO DEL NUEVO INVENTO ---');
   // Asegurarse que los name sean igual que lo de las interfaces para que no de fallos al pasarlo al tipo de datos del Invention
   const datos = await prompts([
     {
@@ -94,14 +94,14 @@ async function flujoAñadirInvento(gestor: GestorMultiverso): Promise<void> {
     }
   ]);
 
-  // Si el usuario cancela a mitad de las preguntas (Ctrl+C)
+  // Si el usuario cancela a mitad de las preguntas
   if (!datos.id) {
     console.log('\n-Operación cancelada.-');
     return;
   }
 
   try {
-    // Forzamos el tipado a Character
+    // Forzamos el tipado a Invention
     const nuevoInvento = datos as Invention;
     
     // Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si el personaje es válido
@@ -109,7 +109,7 @@ async function flujoAñadirInvento(gestor: GestorMultiverso): Promise<void> {
     // Si todo va bien
     console.log(`\n ¡Éxito! El invento ${nuevoInvento.name} ha sido añadida al multiverso.`);
   } catch (error: any) {
-    // Si se intorudce una dimensión que no existe o un dato incorrecto, el error se mostrará aquí 
+    // Si se intorudce un dato incorrecto, el error se mostrará aquí 
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
@@ -118,7 +118,7 @@ async function flujoAñadirInvento(gestor: GestorMultiverso): Promise<void> {
  * Funcion para eliminar una especie de la db
  */
 async function flujoEliminarInvento(gestor: GestorMultiverso): Promise<void> {
-  console.log('\n--- ELIMINAR ESPECIE ---');
+  console.log('\n--- ELIMINAR INVENTO ---');
   const inventos = gestor.inventos.obtenerInventos();
   if (inventos.length === 0) {
     console.log('\nNo hay inventos registradas en el multiverso.');
@@ -146,7 +146,7 @@ async function flujoEliminarInvento(gestor: GestorMultiverso): Promise<void> {
 }
 
 async function flujoModificarInvento(gestor: GestorMultiverso): Promise<void> {
-  console.log('\n--- MODIFICAR ESPECIE ---');
+  console.log('\n--- MODIFICAR INVENTO ---');
   const inventos = gestor.inventos.obtenerInventos();
   if (inventos.length === 0) {
     console.log('\nNo hay inventos registradas en el multiverso.');

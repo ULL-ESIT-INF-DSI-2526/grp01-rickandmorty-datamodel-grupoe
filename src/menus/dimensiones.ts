@@ -88,7 +88,7 @@ async function flujoAñadirDimension(gestor: GestorMultiverso): Promise<void> {
     }
   ]);
 
-  // Si el usuario cancela a mitad de las preguntas (Ctrl+C)
+  // Si el usuario cancela a mitad de las preguntas
   if (!datos.id) {
     console.log('\n-Operación cancelada.-');
     return;

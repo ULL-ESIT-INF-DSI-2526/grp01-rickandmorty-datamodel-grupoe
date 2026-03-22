@@ -96,21 +96,21 @@ async function flujoAñadirEspecie(gestor: GestorMultiverso): Promise<void> {
     }
   ]);
 
-  // Si el usuario cancela a mitad de las preguntas (Ctrl+C)
+  // Si el usuario cancela a mitad de las preguntas
   if (!datos.id) {
     console.log('\n-Operación cancelada.-');
     return;
   }
 
   try {
-    // Forzamos el tipado a Character
+    // Forzamos el tipado a Species
     const nuevaEspecie = datos as Species;
     // Llamamos a la función del gestor, que hará las comprobaciones de necesarios para ver si el personaje es válido
     await gestor.especies.agregarEspecie(nuevaEspecie);
     // Si todo va bien
     console.log(`\n ¡Éxito! La especie ${nuevaEspecie.name} ha sido añadida al multiverso.`);
   } catch (error: any) {
-    // Si se intorudce una dimensión que no existe o un dato incorrecto, el error se mostrará aquí 
+    // Si se intorudce un dato incorrecto, el error se mostrará aquí 
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }

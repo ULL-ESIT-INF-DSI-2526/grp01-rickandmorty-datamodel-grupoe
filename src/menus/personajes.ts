@@ -116,7 +116,7 @@ async function flujoAñadirPersonaje(gestor: GestorMultiverso): Promise<void> {
     }
   ]);
 
-  // Si el usuario cancela a mitad de las preguntas (Ctrl+C)
+  // Si el usuario cancela a mitad de las preguntas
   if (!datos.id) {
     console.log('\n-Operación cancelada.-');
     return;
@@ -130,7 +130,7 @@ async function flujoAñadirPersonaje(gestor: GestorMultiverso): Promise<void> {
     // Si todo va bien
     console.log(`\n ¡Éxito! El personaje ${nuevoPersonaje.name} ha sido añadido al multiverso.`);
   } catch (error: any) {
-    // Si se intorudce una dimensión que no existe o un dato incorrecto, el error se mostrará aquí 
+    // Si se intorudce un dato incorrecto, el error se mostrará aquí 
     console.log(`\n ERROR DEL SISTEMA -- >  ${error.message} \n`);
   }
 }
