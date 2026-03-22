@@ -248,77 +248,81 @@ describe("GestorViajes - Pruebas Unitarias", () => {
     expect(gestor.obtenerViajes()).toHaveLength(0);
   });
 
-    it("debería lanzar un error al eliminar un viaje inexistente", async () => {
-        await expect(gestor.eliminarViaje("V-999")).rejects.toThrow(
-            "No existe un viaje con el ID V-999"
-        );
-    });
+  it("debería lanzar un error al eliminar un viaje inexistente", async () => {
+    await expect(gestor.eliminarViaje("V-999")).rejects.toThrow(
+      "No existe un viaje con el ID V-999",
+    );
+  });
 
-    it ("debería obtener el historial de viajes por viajero", async () => {
-        const viaje1: Travel = {
-            id: "V-6",
-            traveler: {
-                id: "1",
-                name: "Rick",
-                speciesId: "sp-1",
-                dimensionId: "C-137",
-                state: "vivo",
-                affiliation: "Familia",
-                nivelIntelligence: 3,
-                description: "...",
-            },
-            origin: {
-                id: "C-137",
-                name: "Tierra",
-                state: "activa",
-                nivelTecnolog: 10,
-                description: "...",
-            },
-            destination: {
-                id: "J19",
-                name: "Dimensión Doofus",
-                state: "activa",
-                nivelTecnolog: 6,
-                description: "...",
-            },
-            date: new Date(),
-            motive: "Explorar nuevas dimensiones",
-        };
-        const viaje2: Travel = {
-            id: "V-7",
-            traveler: {
-                id: "1",
-                name: "Rick",
-                speciesId: "sp-1",
-                dimensionId: "C-137",
-                state: "vivo",
-                affiliation: "Familia",
-                nivelIntelligence: 3,
-                description: "...",
-            },
-            origin: {
-                id: "J19",
-                name: "Dimensión Doofus",
-                state: "activa",
-                nivelTecnolog: 6,
-                description: "...",
-            },
-            destination: {
-                id: "C-137",
-                name: "Tierra",
-                state: "activa",
-                nivelTecnolog: 10,
-                description: "...",
-            },
-            date: new Date(),
-            motive: "Regresar a casa",
-        };
-        await gestor.agregarViaje(viaje1);
-        await gestor.agregarViaje(viaje2);
+  it("debería obtener el historial de viajes por viajero", async () => {
+    const viaje1: Travel = {
+      id: "V-6",
+      traveler: {
+        id: "1",
+        name: "Rick",
+        speciesId: "sp-1",
+        dimensionId: "C-137",
+        state: "vivo",
+        affiliation: "Familia",
+        nivelIntelligence: 3,
+        description: "...",
+      },
+      origin: {
+        id: "C-137",
+        name: "Tierra",
+        state: "activa",
+        nivelTecnolog: 10,
+        description: "...",
+      },
+      destination: {
+        id: "J19",
+        name: "Dimensión Doofus",
+        state: "activa",
+        nivelTecnolog: 6,
+        description: "...",
+      },
+      date: new Date(),
+      motive: "Explorar nuevas dimensiones",
+    };
+    const viaje2: Travel = {
+      id: "V-7",
+      traveler: {
+        id: "1",
+        name: "Rick",
+        speciesId: "sp-1",
+        dimensionId: "C-137",
+        state: "vivo",
+        affiliation: "Familia",
+        nivelIntelligence: 3,
+        description: "...",
+      },
+      origin: {
+        id: "J19",
+        name: "Dimensión Doofus",
+        state: "activa",
+        nivelTecnolog: 6,
+        description: "...",
+      },
+      destination: {
+        id: "C-137",
+        name: "Tierra",
+        state: "activa",
+        nivelTecnolog: 10,
+        description: "...",
+      },
+      date: new Date(),
+      motive: "Regresar a casa",
+    };
+    await gestor.agregarViaje(viaje1);
+    await gestor.agregarViaje(viaje2);
 
-        const historial = gestor.obtenerHistorialViajesPorViajero("1");
-        expect(historial).toHaveLength(2);
-        expect(historial[0]).toContain("Viaje ID: V-6 Origen: Tierra (ID: C-137) Destino: Dimensión Doofus (ID: J19)");
-        expect(historial[1]).toContain("Viaje ID: V-7 Origen: Dimensión Doofus (ID: J19) Destino: Tierra (ID: C-137)");
-    });
+    const historial = gestor.obtenerHistorialViajesPorViajero("1");
+    expect(historial).toHaveLength(2);
+    expect(historial[0]).toContain(
+      "Viaje ID: V-6 Origen: Tierra (ID: C-137) Destino: Dimensión Doofus (ID: J19)",
+    );
+    expect(historial[1]).toContain(
+      "Viaje ID: V-7 Origen: Dimensión Doofus (ID: J19) Destino: Tierra (ID: C-137)",
+    );
+  });
 });
